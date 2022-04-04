@@ -8,7 +8,7 @@ package fr.insa.forgeard.treillis;
  *
  * @author titouan
  */
-public class Vecteur2D {
+public class Vecteur2D {        //test
     private double px,py;
     
     public double getPx(){
