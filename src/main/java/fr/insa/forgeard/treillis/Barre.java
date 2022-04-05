@@ -50,7 +50,6 @@ public class Barre {
         this.noeudArrive = noeudArrive;
         noeudArrive.getBarresArrive().add(this);
         this.tractionMax = tractionMax;
-        this.compressionMax = compressionMax;
         this.coûtMetre = coûtMetre;
     }
     
