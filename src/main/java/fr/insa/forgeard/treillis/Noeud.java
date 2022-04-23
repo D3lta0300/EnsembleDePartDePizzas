@@ -17,7 +17,7 @@ public abstract class  Noeud {
     private Vecteur2D force;
     private int id;
     private List<Barre> barresDepart;
-    private List<Barre> barresArrive = new ArrayList<Barre>();
+    private List<Barre> barresArrive;
     
     public double getPx() {
         return px;
@@ -37,6 +37,10 @@ public abstract class  Noeud {
     
     public int getId(){
         return this.id;
+    }
+    
+    public void setID(int a){
+        this.id = a;
     }
 
     public Vecteur2D getForce() {
@@ -93,5 +97,11 @@ public abstract class  Noeud {
      */
     public List<Barre> getBarresArrive() {
         return barresArrive;
+    }
+    
+    public List<Barre> barresIncidentes(){
+        List<Barre> out = this.barresDepart;
+        out.addAll(barresArrive);
+        return out;
     }
 }

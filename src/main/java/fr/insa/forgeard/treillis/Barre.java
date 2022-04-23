@@ -66,7 +66,6 @@ public class Barre {
         return out;
     }
     
-    //ToDo
     public double angle(Noeud n){
         double a = n.getPx()-this.noeudOppose(n).getPx();
         double b = n.getPy()-this.noeudOppose(n).getPy();
