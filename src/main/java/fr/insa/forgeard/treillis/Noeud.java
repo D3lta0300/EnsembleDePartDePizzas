@@ -35,7 +35,7 @@ public abstract class  Noeud {
         this.py = py;
     }
     
-    public int getId(){
+    public int getID(){
         return this.id;
     }
     

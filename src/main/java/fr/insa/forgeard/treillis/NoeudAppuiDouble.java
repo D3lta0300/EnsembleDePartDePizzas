@@ -13,9 +13,13 @@ public class NoeudAppuiDouble extends NoeudAppui {
         super(id, px, py, force);
     }
     
+    public NoeudAppuiDouble(double x, double y){
+        super(0,x,y,new Vecteur2D());
+    }
+    
     @Override
     public String toString(){
-        return "Le noeud " + this.getId() + " est en (" + this.getPx() + ", " +  this.getPy() + ") et subbit une force " + this.getForce();
+        return "Le noeud " + this.getID() + " est en (" + this.getPx() + ", " +  this.getPy() + ") et subbit une force " + this.getForce();
     }
     
     @Override

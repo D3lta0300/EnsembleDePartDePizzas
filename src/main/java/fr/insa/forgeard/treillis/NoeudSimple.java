@@ -14,6 +14,10 @@ public class NoeudSimple extends Noeud {
         super(id, px, py, force);
     }
     
+    public NoeudSimple(double x, double y){
+        super(0,x,y,new Vecteur2D());
+    }
+    
     public NoeudSimple(){
         this(-1,0.0,0.0, new Vecteur2D());
     }

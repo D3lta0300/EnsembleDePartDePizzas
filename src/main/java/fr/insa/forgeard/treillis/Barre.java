@@ -15,8 +15,28 @@ public class Barre {
     private double tractionMax, compressionMax;
     private double coûtMetre;
 
-    public int getId() {
+    public Noeud getNoeudDepart() {
+        return noeudDepart;
+    }
+
+    public void setNoeudDepart(Noeud noeudDepart) {
+        this.noeudDepart = noeudDepart;
+    }
+
+    public Noeud getNoeudArrive() {
+        return noeudArrive;
+    }
+
+    public void setNoeudArrive(Noeud noeudArrive) {
+        this.noeudArrive = noeudArrive;
+    }
+
+    public int getID() {
         return id;
+    }
+    
+    public void setID(int id){
+        this.id = id;
     }
 
     public double getTractionMax() {
@@ -51,6 +71,10 @@ public class Barre {
         noeudArrive.getBarresArrive().add(this);
         this.tractionMax = tractionMax;
         this.coûtMetre = coûtMetre;
+    }
+    
+    public Barre(Noeud noeudDepart, Noeud noeudArrive){
+        this(0, noeudDepart, noeudArrive,0.0,0.0,0.0);
     }
     
     
