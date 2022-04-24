@@ -82,7 +82,7 @@ public abstract class  Noeud {
     
     @Override
     public String toString(){
-        return "Le noeud " + id + " est en (" + this.px + ", " +  this.py + ") et subbit une force " + this.force;
+        return "N. n°" + id + " : (" + px + ", " + py + ") ; ";
     }
 
     /**

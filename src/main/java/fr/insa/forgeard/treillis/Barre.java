@@ -76,6 +76,11 @@ public class Barre {
     public Barre(Noeud noeudDepart, Noeud noeudArrive){
         this(0, noeudDepart, noeudArrive,0.0,0.0,0.0);
     }
+
+    @Override
+    public String toString() {
+        return "Barre{" + "id=" + id + ", noeudDepart=" + noeudDepart + ", noeudArrive=" + noeudArrive + '}';
+    }
     
     
     public Noeud noeudOppose(Noeud in){
