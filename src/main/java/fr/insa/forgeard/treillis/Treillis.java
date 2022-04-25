@@ -177,6 +177,34 @@ public class Treillis {
         return out;
     }
 
+    public void deleteNoeud(int id) {
+        List<Integer> barresProblemmatique = new ArrayList<Integer>();
+        boolean deletable = true;
+        for (Barre b : this.barres) {
+            if (b.getNoeudArrive().getID() == id) {
+                barresProblemmatique.add(b.getID());
+                deletable = false;
+            } else if (b.getNoeudDepart().getID() == id) {
+                barresProblemmatique.add(b.getID());
+                deletable = false;
+            }
+        }
+
+        if (deletable) {
+            this.getNoeuds().remove(this.getNoeudByID(id));
+            System.out.println("Le noeud a bien été supprimé");
+        } else if (!deletable) {
+            System.out.print("Les barres aux ID suivantes empêchent la suppression du noeud " + id + " : ");
+            for (int i : barresProblemmatique) {
+                System.out.print(i + " ; ");
+            }
+            System.out.println("");
+        } else {
+            System.out.println("There is an error.");
+        }
+
+    }
+
     public static void menuTexte() {
         System.out.println("Bienvenue dans l'éditeur de treillis ! Vous pouvez quitter un menu à tout moment en entrant \"0\"");
         int action = 1;
@@ -248,19 +276,23 @@ public class Treillis {
                     System.out.println("Que souhaitez vous supprimer ?\n  - 1 : une barre\n  - 2 : un noeud \n \n");
                     action = scanner.nextInt();
                     scanner.nextInt();
-                    
-                    if (action == 1){
-                        System.out.println("Quelle barre souhaitez vous supprimez d'apres cette liste ? (entrez l'ID)");
+
+                    if (action == 1) {
+                        System.out.println("Quelle barre souhaitez vous supprimez d'apres cette liste ? (entrez l'ID) ");
                         treillis.showBarres();
                         action = scanner.nextInt();
                         scanner.nextInt();
-                        
+
                         treillis.getBarres().remove(treillis.getBarreByID(action));
                         System.out.println("La barre a bien été supprimée.\n\n");
-                    } else if (action == 2){
-                        System.out.println("Vous êtes chiants, la fonctionnalité n'est pas encore prête.");
+                    } else if (action == 2) {
+                        System.out.println("Quel noeud souhaitez vous supprimez d'apres cette liste ? (entrez l'ID) ");
+                        treillis.showNoeuds();
+                        treillis.deleteNoeud(scanner.nextInt());
+                        scanner.nextInt();
+                        System.out.println("\n");
                     } else {
-                        System.out.println("Veuillez entrer un nombre compris entre 0 et 2.");
+                        System.out.println("Veuillez entrer un nombre compris entre 0 et 2.\n");
                     }
                 }
             }
