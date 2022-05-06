@@ -204,6 +204,15 @@ public class Treillis {
         }
 
     }
+    
+    public void Forces(Vecteur2D force, int noeudID){
+        this.getNoeudByID(noeudID).setForce(force);
+        if (this.getNoeudByID(noeudID).nombreInconnue()>0){
+            for (Barre b : this.getNoeudByID(noeudID).barresIncidentes()){
+                
+            }
+        }
+    }
 
     public static void menuTexte() {
         System.out.println("Bienvenue dans l'éditeur de treillis ! Vous pouvez quitter un menu à tout moment en entrant \"0\"");
@@ -213,18 +222,20 @@ public class Treillis {
         while (action != 0) {
 
             //initialisation
-            if (treillis.getNoeuds() == new ArrayList<Noeud>()) {
+            if (treillis.getNoeuds().isEmpty()) {
                 System.out.println("Vous devez dans un premier temps définir les points d'ancrages. \n \n Quel est la coordonnée x du noeud appui double ? :");
                 double x = scanner.nextDouble();
                 System.out.println("Sa coordonée en y ?");
                 double y = scanner.nextDouble();
                 Noeud n1 = new NoeudAppuiDouble(x, y);
-
+                treillis.addNoeud(n1);
+                
                 System.out.println("Quel est la coordonée en x du noeud appui simple ?");
                 x = scanner.nextDouble();
                 System.out.println("Sa coordonée en y ?");
                 y = scanner.nextDouble();
                 Noeud n2 = new NoeudAppuiSimple(x, y);
+                treillis.addNoeud(n2);
 
                 treillis.addBarre(new Barre(n1, n2));
 
@@ -234,21 +245,21 @@ public class Treillis {
             System.out.println(treillis);
             System.out.println("Que voulez vous faire ? :\n  - Entrez \"1\" pour ajouter un élément.\n  - Entrez \"2\" pour en supprimer un.\n");
             action = scanner.nextInt();
-
+            
+            
             if (action == 1) {
                 while (action != 0) {
                     System.out.println("Quel type d'élément souhaitez vous ajouter ? (1 = barre ; 2 = noeud");
-
+                    action = scanner.nextInt();
+                    
                     if (action == 1) {
                         System.out.println("Choisissez un noeud de départ dans la liste ci-dessous (entrez son id) : ");
                         treillis.showNoeuds();
                         int selection = scanner.nextInt();
-                        scanner.nextInt();
                         Noeud noeudDepart = treillis.getNoeudByID(selection);
 
                         System.out.println("Quel est le noeud d'arrive ? ");
                         selection = scanner.nextInt();
-                        scanner.nextInt();
                         Noeud noeudArrive = treillis.getNoeudByID(selection);
 
                         treillis.addBarre(new Barre(noeudDepart, noeudArrive));
@@ -257,11 +268,9 @@ public class Treillis {
                     } else if (action == 2) {
                         System.out.println("Px : ");
                         double px = scanner.nextDouble();
-                        scanner.nextDouble();
 
                         System.out.println("Py : ");
                         double py = scanner.nextDouble();
-                        scanner.nextDouble();
 
                         treillis.addNoeud(new NoeudSimple(px, py));
                         System.out.println("'Le noeud a bien été créé et ajouté au treillis.\n");
@@ -275,13 +284,11 @@ public class Treillis {
                 while (action != 0) {
                     System.out.println("Que souhaitez vous supprimer ?\n  - 1 : une barre\n  - 2 : un noeud \n \n");
                     action = scanner.nextInt();
-                    scanner.nextInt();
 
                     if (action == 1) {
                         System.out.println("Quelle barre souhaitez vous supprimez d'apres cette liste ? (entrez l'ID) ");
                         treillis.showBarres();
                         action = scanner.nextInt();
-                        scanner.nextInt();
 
                         treillis.getBarres().remove(treillis.getBarreByID(action));
                         System.out.println("La barre a bien été supprimée.\n\n");
@@ -289,12 +296,12 @@ public class Treillis {
                         System.out.println("Quel noeud souhaitez vous supprimez d'apres cette liste ? (entrez l'ID) ");
                         treillis.showNoeuds();
                         treillis.deleteNoeud(scanner.nextInt());
-                        scanner.nextInt();
                         System.out.println("\n");
                     } else {
                         System.out.println("Veuillez entrer un nombre compris entre 0 et 2.\n");
                     }
                 }
+                action = 1;
             }
 
         }
