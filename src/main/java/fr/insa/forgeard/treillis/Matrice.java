@@ -21,6 +21,7 @@ public class Matrice {
         }
     }
 
+    @Override
     public String toString() {
         String s;
         s = "";
@@ -74,8 +75,7 @@ public class Matrice {
         if (this.getNbrCol() != n.getNbrCol()) {
             throw new Error("nombre de cols incompatible");
         }
-        Matrice res = new Matrice(this.getNbrLig() + n.getNbrLig(),
-                this.getNbrCol());
+        Matrice res = new Matrice(this.getNbrLig() + n.getNbrLig(),this.getNbrCol());
         for (int i = 0; i < this.getNbrLig(); i++) {
             for (int j = 0; j < this.getNbrCol(); j++) {
                 res.set(i, j, this.get(i, j));
@@ -188,7 +188,7 @@ public class Matrice {
         }
 
 
-    public ResGauss DescenteGauss() {
+    public ResGauss descenteGauss() {
         int r = 0;
         int sig = 0;
         for (int i = 0; i < this.nbrLig; i++) {
