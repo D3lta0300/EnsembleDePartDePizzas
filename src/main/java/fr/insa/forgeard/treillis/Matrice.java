@@ -50,7 +50,7 @@ public class Matrice {
         return (int) (Math.random() * 2 + 1);
     }
 
-    public static Matrice matAleaZeroUnDeux(int nbLig, int nbCol,double probaZero) {
+    public static Matrice matAleaZeroUnDeux(int nbLig, int nbCol, double probaZero) {
         Matrice res;
         res = new Matrice(nbLig, nbCol);
         for (int i = 0; i < res.nbrLig; i++) {
@@ -75,7 +75,7 @@ public class Matrice {
         if (this.getNbrCol() != n.getNbrCol()) {
             throw new Error("nombre de cols incompatible");
         }
-        Matrice res = new Matrice(this.getNbrLig() + n.getNbrLig(),this.getNbrCol());
+        Matrice res = new Matrice(this.getNbrLig() + n.getNbrLig(), this.getNbrCol());
         for (int i = 0; i < this.getNbrLig(); i++) {
             for (int j = 0; j < this.getNbrCol(); j++) {
                 res.set(i, j, this.get(i, j));
@@ -186,7 +186,9 @@ public class Matrice {
         } else {
             return imax;
         }
+    }
 
+    
 
     public ResGauss descenteGauss() {
         int r = 0;

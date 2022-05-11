@@ -14,17 +14,22 @@ import java.util.Scanner;
 public class Test {
 
     public static void main(String[] args) {
-//        Console console = System.console();
-//        if (console == null) {System.out.println("No console: non-interactive mode! You should execute this programm directly from command line.");System.exit(0);}
-//        System.out.println("Hello world : ");
-//        String in = console.readLine();
-//        //System.out.println("\n");
-//        System.out.println(in);
+        
+        Integer a = 3;
+        Integer b = 7;
+        Matrice test = new Matrice(3,3);
+        test.set(0, 0, 0);
+        test.set(0, 1, -5);
+        test.set(0, 2, -5);
+        test.set(1, 0, -2);
+        test.set(1, 1, -4);
+        test.set(1, 2, -2);
+        test.set(2, 0, 4);
+        test.set(2, 1, 3);
+        test.set(2, 2, 1);
+        System.out.println("Test vaux : \n");
+        System.out.println(test);
+        System.out.println("Sa matrice inverse est : \n");
 
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("enter whatever you want, I will display it : ");
-//        String in = scanner.nextLine();
-//        System.out.println(in);
-        Treillis.menuTexte();
     }
 }
