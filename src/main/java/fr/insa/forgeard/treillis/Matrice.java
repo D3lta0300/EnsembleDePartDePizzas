@@ -67,8 +67,24 @@ public class Matrice {
         return this.nbrLig;
     }
 
+    public int getNbrCol() {
+        return this.nbrCol;
+    }
+    
+    public void setNbrLig(int nbrLig) {
+        this.nbrLig = nbrLig;
+    }
+
+    public void setNbrCol(int nbrCol) {
+        this.nbrCol = nbrCol;
+    }
+    
     public double get(int lig, int col) {
         return this.coeffs[lig][col];
+    }   
+    
+    public void set(int lig, int col, double nVal) {
+        this.coeffs[lig][col] = nVal;
     }
 
     public Matrice concatLig(Matrice n) {
@@ -88,7 +104,37 @@ public class Matrice {
         }
         return res;
     }
-
+    public Matrice concatCol(Matrice n) {
+        if (this.getNbrLig() != n.getNbrLig()) {
+            throw new Error("nombre de cols incompatible");
+        }
+        Matrice res = new Matrice(this.getNbrLig(),
+                this.getNbrCol() + n.getNbrCol());
+        for (int i = 0; i < this.getNbrLig(); i++) {
+            for (int j = 0; j < this.getNbrCol(); j++) {
+                res.set(i, j, this.get(i, j));
+            }
+        }
+        for (int i = 0; i < n.getNbrLig(); i++) {
+            for (int j = 0; j < n.getNbrCol(); j++) {
+                res.set(i, j + this.getNbrCol(), n.get(i, j));
+            }
+        }
+        return res;
+    }
+    
+    public Matrice subCols(int cMin, int cMax){
+    if((0>cMin) || (cMin>cMax) || (cMax>this.getNbrCol())){
+        throw new Error("les paramètres ne remplissent pas les conditions demandées");
+    }
+    Matrice R= new Matrice(this.getNbrLig(),cMax-cMin+1);
+    for (int lig=0; lig<R.getNbrLig(); lig++){
+        for(int col=0; col<R.getNbrCol(); col++){
+            R.set(lig,col,this.get(lig,cMin+col));
+        }
+    }
+    return R;
+    }
     public Matrice add(Matrice m2) {
         if (this.nbrLig != m2.nbrLig || this.nbrCol != m2.nbrCol) {
             throw new Error("incompatibles");
@@ -120,13 +166,7 @@ public class Matrice {
         return this.add(m2.opp());
     }
 
-    public void set(int lig, int col, double nVal) {
-        this.coeffs[lig][col] = nVal;
-    }
 
-    public int getNbrCol() {
-        return nbrCol;
-    }
 
     public Matrice mult(Matrice m2) {
         if (this.nbrCol != m2.nbrLig) {
@@ -191,35 +231,23 @@ public class Matrice {
     
 
     public ResGauss descenteGauss() {
-        int r = 0;
-        int sig = 0;
-        for (int i = 0; i < this.nbrLig; i++) {
-            if (this.lignePlusGrandPivot(i) != -1) {
-                this.permuteLigne(i, this.lignePlusGrandPivot(i));
-                for (int j = i + 1; j < this.nbrLig; j++) {
-                    this.transvection(i, j);
-                }
-                sig++;
+        int lignepivot;
+    ResGauss res= new ResGauss(0,1);
+    for(int i=0; i<Math.min(this.getNbrLig(),this.getNbrCol()); i++){
+        lignepivot= this.lignePlusGrandPivot(i);
+        if(lignepivot!=-1){
+            res.sigPerm=res.sigPerm*this.permuteLigne(i, i);
+            res.rang=res.rang+1;
+            for (int i2=i+1; i2<this.getNbrLig(); i2++){
+                this.transvection(i, i2);
             }
         }
-
-        for (int i = 0; i < this.nbrLig; i++) {
-            double s = 0;
-            for (int j = 0; j < this.nbrLig; j++) {
-                s = s + Math.abs(this.coeffs[i][j]);
-            }
-            if (s != 0) {
-                r++;
-            }
+        else{
+           System.out.println("la matrice n'est pas inversible");
         }
-
-        if ((sig % 2) == 1) {
-            sig = -1;
-        } else {
-            sig = 1;
-        }
-
-        ResGauss res = new ResGauss(r, sig);
+    }
+System.out.println(this.toString());  
+System.out.println(res) ;
         return res;
     }
 
@@ -233,25 +261,6 @@ public class Matrice {
         return deter;
     }
 
-    public Matrice concatCol(Matrice n) {
-        if (this.getNbrLig() != n.getNbrLig()) {
-            throw new Error("nombre de cols incompatible");
-        }
-        Matrice res = new Matrice(this.getNbrLig(),
-                this.getNbrCol() + n.getNbrCol());
-        for (int i = 0; i < this.getNbrLig(); i++) {
-            for (int j = 0; j < this.getNbrCol(); j++) {
-                res.set(i, j, this.get(i, j));
-            }
-        }
-        for (int i = 0; i < n.getNbrLig(); i++) {
-            for (int j = 0; j < n.getNbrCol(); j++) {
-                res.set(i, j + this.getNbrCol(), n.get(i, j));
-            }
-        }
-        return res;
-    }
-
     public void diagUnitaire() {
         for (int i = 0; i < this.nbrLig; i++) {
             if (this.coeffs[i][i] != 0) {
@@ -263,20 +272,32 @@ public class Matrice {
         }
     }
 
-    public Matrice solSecondMembre() {
-        Matrice m = new Matrice(this.nbrLig, 1);
-        m.set((this.nbrLig - 1), 0, this.get(this.nbrLig - 1, this.nbrCol - 1));
-        System.out.println(m);
-
-        for (int i = this.nbrLig - 2; i > -1; i--) {
-            double somme = this.coeffs[i][this.nbrCol - 1];
-            for (int j = i + 1; j < this.nbrLig; j++) {
-                somme = somme - (this.coeffs[i][j] * m.coeffs[j][0]);
-            }
-            m.set(i, 0, somme);
-            System.out.println(m);
+    public Matrice remontéeGauss(){
+        for(int i=this.getNbrLig()-1; i>0; i--){
+            for(int j=i-1; j>-1; j--){
+                this.transvection(i, j);
         }
-        return m;
     }
-
+    return this;
+    }
+public static void resolution(){
+    System.out.println("Combien y a t'il d'inconnues?");
+    int inc=Lire.i();
+    Matrice m= new Matrice (inc, inc+1);
+    for(int i=0; i<m.getNbrLig(); i++){
+        for(int j=0; j<m.getNbrCol(); j++){
+            System.out.println("Entrez le cofficient ("+ (i+1)+","+ (j+1)+")");
+            m.setCoeffs(i,j,Lire.d());
+        }
+    }
+    if(m.subCols(0,m.getNbrCol()-2).determinant()==0){
+        System.out.println("Le système a 0 ou une infinité de solutions");
+    }
+    else{
+        m.descenteGauss();
+        m.remontéeGauss().diagUnitaire();
+        System.out.println("Les solutions sont:");
+        System.out.println(m.subCols(m.getNbrCol()-1,m.getNbrCol()-1).toString());
+    }
+}
 }
