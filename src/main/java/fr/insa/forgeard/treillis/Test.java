@@ -30,6 +30,6 @@ public class Test {
         System.out.println("Test vaux : \n");
         System.out.println(test);
         System.out.println("Sa matrice inverse est : \n");
-
+        
     }
 }
