@@ -9,34 +9,35 @@ package fr.insa.forgeard.treillis;
  * @author Elève
  */
 public class ResGauss {
-
     private int rang;
-    private int signature;
-
-    public ResGauss(int rang, int signature) {
-        this.rang = rang;
-        this.signature = signature;
+    private int sigPerm;
+    
+    public ResGauss (int rang, int sig){
+     this.rang=rang;
+     this.sigPerm=sig;
     }
-
+    
     public int getSig() {
-        return this.signature;
+        return this.sigPerm;
     }
 
     public int getRang() {
-        return this.rang;
+        return rang;
     }
 
+    public void setRang(int rang) {
+        this.rang = rang;
+    }
+
+    public int getSigPerm() {
+        return sigPerm;
+    }
+    
+    
+ 
     @Override
-    public String toString() {
-        String s;
-        s = "Résultat retourné :\n"
-                + "{ResGauss : rang = " + this.rang + " ; sigPerm = " + this.signature + "}";
-        return s;
+    public String toString(){
+     String res="ResGauss: rang = "+this.rang+" ; sigPerm = "+ this.sigPerm;
+     return res;
     }
-
-    public static void main(String[] args){
-        ResGauss R = new ResGauss(0, 0);
-        System.out.println(R);
-    }
-
 }
