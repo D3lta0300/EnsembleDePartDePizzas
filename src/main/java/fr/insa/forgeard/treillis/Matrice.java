@@ -70,7 +70,7 @@ public class Matrice {
     public int getNbrCol() {
         return this.nbrCol;
     }
-    
+
     public void setNbrLig(int nbrLig) {
         this.nbrLig = nbrLig;
     }
@@ -78,11 +78,11 @@ public class Matrice {
     public void setNbrCol(int nbrCol) {
         this.nbrCol = nbrCol;
     }
-    
+
     public double get(int lig, int col) {
         return this.coeffs[lig][col];
-    }   
-    
+    }
+
     public void set(int lig, int col, double nVal) {
         this.coeffs[lig][col] = nVal;
     }
@@ -104,6 +104,7 @@ public class Matrice {
         }
         return res;
     }
+
     public Matrice concatCol(Matrice n) {
         if (this.getNbrLig() != n.getNbrLig()) {
             throw new Error("nombre de cols incompatible");
@@ -122,19 +123,20 @@ public class Matrice {
         }
         return res;
     }
-    
-    public Matrice subCols(int cMin, int cMax){
-    if((0>cMin) || (cMin>cMax) || (cMax>this.getNbrCol())){
-        throw new Error("les paramètres ne remplissent pas les conditions demandées");
-    }
-    Matrice R= new Matrice(this.getNbrLig(),cMax-cMin+1);
-    for (int lig=0; lig<R.getNbrLig(); lig++){
-        for(int col=0; col<R.getNbrCol(); col++){
-            R.set(lig,col,this.get(lig,cMin+col));
+
+    public Matrice subCols(int cMin, int cMax) {
+        if ((0 > cMin) || (cMin > cMax) || (cMax > this.getNbrCol())) {
+            throw new Error("les paramètres ne remplissent pas les conditions demandées");
         }
+        Matrice R = new Matrice(this.getNbrLig(), cMax - cMin + 1);
+        for (int lig = 0; lig < R.getNbrLig(); lig++) {
+            for (int col = 0; col < R.getNbrCol(); col++) {
+                R.set(lig, col, this.get(lig, cMin + col));
+            }
+        }
+        return R;
     }
-    return R;
-    }
+
     public Matrice add(Matrice m2) {
         if (this.nbrLig != m2.nbrLig || this.nbrCol != m2.nbrCol) {
             throw new Error("incompatibles");
@@ -165,8 +167,6 @@ public class Matrice {
     public Matrice moins(Matrice m2) {
         return this.add(m2.opp());
     }
-
-
 
     public Matrice mult(Matrice m2) {
         if (this.nbrCol != m2.nbrLig) {
@@ -228,26 +228,23 @@ public class Matrice {
         }
     }
 
-    
-
     public ResGauss descenteGauss() {
         int lignepivot;
-    ResGauss res= new ResGauss(0,1);
-    for(int i=0; i<Math.min(this.getNbrLig(),this.getNbrCol()); i++){
-        lignepivot= this.lignePlusGrandPivot(i);
-        if(lignepivot!=-1){
-            res.sigPerm=res.sigPerm*this.permuteLigne(i, i);
-            res.rang=res.rang+1;
-            for (int i2=i+1; i2<this.getNbrLig(); i2++){
-                this.transvection(i, i2);
+        ResGauss res = new ResGauss(0, 1);
+        for (int i = 0; i < Math.min(this.getNbrLig(), this.getNbrCol()); i++) {
+            lignepivot = this.lignePlusGrandPivot(i);
+            if (lignepivot != -1) {
+                res.setSig(res.sigPerm * this.permuteLigne(i, i));
+                res.rang = res.rang + 1;
+                for (int i2 = i + 1; i2 < this.getNbrLig(); i2++) {
+                    this.transvection(i, i2);
+                }
+            } else {
+                System.out.println("la matrice n'est pas inversible");
             }
         }
-        else{
-           System.out.println("la matrice n'est pas inversible");
-        }
-    }
-System.out.println(this.toString());  
-System.out.println(res) ;
+        System.out.println(this.toString());
+        System.out.println(res);
         return res;
     }
 
@@ -272,32 +269,32 @@ System.out.println(res) ;
         }
     }
 
-    public Matrice remontéeGauss(){
-        for(int i=this.getNbrLig()-1; i>0; i--){
-            for(int j=i-1; j>-1; j--){
+    public Matrice remontéeGauss() {
+        for (int i = this.getNbrLig() - 1; i > 0; i--) {
+            for (int j = i - 1; j > -1; j--) {
                 this.transvection(i, j);
+            }
+        }
+        return this;
+    }
+
+    public static void resolution() {
+        System.out.println("Combien y a t'il d'inconnues?");
+        int inc = Lire.i();
+        Matrice m = new Matrice(inc, inc + 1);
+        for (int i = 0; i < m.getNbrLig(); i++) {
+            for (int j = 0; j < m.getNbrCol(); j++) {
+                System.out.println("Entrez le cofficient (" + (i + 1) + "," + (j + 1) + ")");
+                m.setCoeffs(i, j, Lire.d());
+            }
+        }
+        if (m.subCols(0, m.getNbrCol() - 2).determinant() == 0) {
+            System.out.println("Le système a 0 ou une infinité de solutions");
+        } else {
+            m.descenteGauss();
+            m.remontéeGauss().diagUnitaire();
+            System.out.println("Les solutions sont:");
+            System.out.println(m.subCols(m.getNbrCol() - 1, m.getNbrCol() - 1).toString());
         }
     }
-    return this;
-    }
-public static void resolution(){
-    System.out.println("Combien y a t'il d'inconnues?");
-    int inc=Lire.i();
-    Matrice m= new Matrice (inc, inc+1);
-    for(int i=0; i<m.getNbrLig(); i++){
-        for(int j=0; j<m.getNbrCol(); j++){
-            System.out.println("Entrez le cofficient ("+ (i+1)+","+ (j+1)+")");
-            m.setCoeffs(i,j,Lire.d());
-        }
-    }
-    if(m.subCols(0,m.getNbrCol()-2).determinant()==0){
-        System.out.println("Le système a 0 ou une infinité de solutions");
-    }
-    else{
-        m.descenteGauss();
-        m.remontéeGauss().diagUnitaire();
-        System.out.println("Les solutions sont:");
-        System.out.println(m.subCols(m.getNbrCol()-1,m.getNbrCol()-1).toString());
-    }
-}
 }
