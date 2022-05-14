@@ -234,8 +234,8 @@ public class Matrice {
         for (int i = 0; i < Math.min(this.getNbrLig(), this.getNbrCol()); i++) {
             lignepivot = this.lignePlusGrandPivot(i);
             if (lignepivot != -1) {
-                res.setSig(res.sigPerm * this.permuteLigne(i, i));
-                res.rang = res.rang + 1;
+                res.setSig(res.getSigPerm() * this.permuteLigne(i, i));
+                res.setRang(res.getRang() + 1);
                 for (int i2 = i + 1; i2 < this.getNbrLig(); i2++) {
                     this.transvection(i, i2);
                 }
