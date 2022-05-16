@@ -15,7 +15,7 @@ import javafx.scene.layout.HBox;
  *
  * @author titouan
  */
-public class CoucouPanel {
+public class CoucouPanel extends BorderPane{
     private BorderPane entete;
     private Label lNom;
     private TextField tfNom;
