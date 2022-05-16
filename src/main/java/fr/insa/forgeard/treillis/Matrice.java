@@ -228,14 +228,13 @@ public class Matrice {
         }
     }
 
-    public ResGauss descenteGauss() {
+    public int descenteGauss() {
         int lignepivot;
-        ResGauss res = new ResGauss(0, 1);
+        int res = 0;
         for (int i = 0; i < Math.min(this.getNbrLig(), this.getNbrCol()); i++) {
             lignepivot = this.lignePlusGrandPivot(i);
             if (lignepivot != -1) {
-                res.setSig(res.getSigPerm() * this.permuteLigne(i, i));
-                res.setRang(res.getRang() + 1);
+                res++;
                 for (int i2 = i + 1; i2 < this.getNbrLig(); i2++) {
                     this.transvection(i, i2);
                 }
@@ -246,16 +245,6 @@ public class Matrice {
         System.out.println(this.toString());
         System.out.println(res);
         return res;
-    }
-
-    public double determinant() {
-        int sig = this.descenteGauss().getSig();
-        double deter = 1;
-        for (int i = 0; i < this.nbrLig; i++) {
-            deter = deter * this.coeffs[i][i];
-        }
-        deter = deter * sig;
-        return deter;
     }
 
     public void diagUnitaire() {
@@ -288,13 +277,10 @@ public class Matrice {
                 m.setCoeffs(i, j, Lire.d());
             }
         }
-        if (m.subCols(0, m.getNbrCol() - 2).determinant() == 0) {
-            System.out.println("Le système a 0 ou une infinité de solutions");
-        } else {
-            m.descenteGauss();
-            m.remontéeGauss().diagUnitaire();
-            System.out.println("Les solutions sont:");
-            System.out.println(m.subCols(m.getNbrCol() - 1, m.getNbrCol() - 1).toString());
-        }
+
+        m.descenteGauss();
+        m.remontéeGauss().diagUnitaire();
+        System.out.println("Les solutions sont:");
+        System.out.println(m.subCols(m.getNbrCol() - 1, m.getNbrCol() - 1).toString());
     }
 }
