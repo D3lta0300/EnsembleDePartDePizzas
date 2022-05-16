@@ -202,12 +202,9 @@ public class Matrice {
 
     public void transvection(int i1, int i2) {
         if (i1 > this.nbrCol || i2 > this.nbrCol || this.coeffs[i1][i1] == 0) {
-            while (i1==0){
-             i1++;   
-            }
-            permuteLigne (i1,i2);
-            }
-        
+            this.permuteLigne(this.lignePlusGrandPivot(i1), i1);
+        }
+
         double p = this.coeffs[i2][i1] / this.coeffs[i1][i1];
         for (int i = 0; i < this.nbrCol; i++) {
             this.set(i2, i, this.coeffs[i2][i] - (p * this.coeffs[i1][i]));
@@ -221,7 +218,7 @@ public class Matrice {
         int imax = colonne;
         for (int i = colonne; i < this.nbrLig; i++) {
             if (Math.abs(this.get(i, colonne)) > k) {
-                k = this.get(i, colonne);
+                k = Math.abs(this.get(i, colonne));
                 imax = i;
             }
         }
@@ -243,11 +240,9 @@ public class Matrice {
                     this.transvection(i, i2);
                 }
             } else {
-                System.out.println("la matrice n'est pas inversible");
+                throw new Error("La matrice n'est pas inversible");
             }
         }
-        System.out.println(this.toString());
-        System.out.println(res);
         return res;
     }
 
@@ -262,15 +257,14 @@ public class Matrice {
         }
     }
 
-    public Matrice remontéeGauss() {
+    public void remontéeGauss() {
         for (int i = this.getNbrLig() - 1; i > 0; i--) {
             for (int j = i - 1; j > -1; j--) {
                 this.transvection(i, j);
             }
         }
-        return this;
     }
-
+    /*
     public static void resolution() {
         System.out.println("Combien y a t'il d'inconnues?");
         int inc = Lire.i();
@@ -287,4 +281,5 @@ public class Matrice {
         System.out.println("Les solutions sont:");
         System.out.println(m.subCols(m.getNbrCol() - 1, m.getNbrCol() - 1).toString());
     }
+     */
 }

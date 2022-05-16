@@ -18,7 +18,7 @@ public class Test {
         Integer a = 3;
         Integer b = 7;
         Matrice test = new Matrice(3,3);
-        test.set(0, 0, 1);
+        test.set(0, 0, 0);
         test.set(0, 1, -5);
         test.set(0, 2, -5);
         test.set(1, 0, -2);
