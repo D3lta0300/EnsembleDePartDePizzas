@@ -202,8 +202,12 @@ public class Matrice {
 
     public void transvection(int i1, int i2) {
         if (i1 > this.nbrCol || i2 > this.nbrCol || this.coeffs[i1][i1] == 0) {
-            throw new Error("Impossible");
-        }
+            while (i1==0){
+             i1++;   
+            }
+            permuteLigne (i1,i2);
+            }
+        
         double p = this.coeffs[i2][i1] / this.coeffs[i1][i1];
         for (int i = 0; i < this.nbrCol; i++) {
             this.set(i2, i, this.coeffs[i2][i] - (p * this.coeffs[i1][i]));
