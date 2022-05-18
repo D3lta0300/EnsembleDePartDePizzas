@@ -17,7 +17,8 @@ import javafx.scene.layout.HBox;
  */
 public class CoucouPanel extends BorderPane{
     private BorderPane entete;
-    private Label lNom;
+    private Label positionx;
+    private Label positiony;
     private TextField tfNom;
         
     private TextArea messages;
@@ -27,10 +28,12 @@ public class CoucouPanel extends BorderPane{
     private Button bSalut;
     
     public CoucouPanel(){
-        this.lNom = new Label("nom :");
+        this.positionx = new Label("Position X :");
+        this.positiony = new Label("Position y :");
         this.tfNom = new TextField();
         this.entete = new BorderPane();
-        this.entete.setLeft(this.lNom);
+        this.entete.setLeft(this.positionx);
+        this.entete.setLeft(this.positiony);
         this.entete.setCenter(this.tfNom);
         this.setTop(this.entete);
         
