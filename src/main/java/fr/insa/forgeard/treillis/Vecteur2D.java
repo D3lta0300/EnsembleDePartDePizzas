@@ -20,7 +20,7 @@ public class Vecteur2D {        //test
     public void setPy(double py){
         this.py = py;
     }
-    public void setPX(double px){
+    public void setPx(double px){
         this.px = px;
     }
     public String toStrig(){
