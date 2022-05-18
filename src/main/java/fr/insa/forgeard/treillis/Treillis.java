@@ -207,11 +207,12 @@ public class Treillis {
     
     public void Forces(Vecteur2D force, int noeudID){
         this.getNoeudByID(noeudID).setForce(force);
-        if (this.getNoeudByID(noeudID).nombreInconnue()>0){
-            for (Barre b : this.getNoeudByID(noeudID).barresIncidentes()){
-                
-            }
-        }
+        
+        //test d'inversibilité
+        
+        //définition de la matrice
+        
+        //calcul des forces
     }
 
     public static void menuTexte() {

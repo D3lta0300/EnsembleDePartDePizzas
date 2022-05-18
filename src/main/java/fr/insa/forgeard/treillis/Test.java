@@ -29,8 +29,11 @@ public class Test {
         test.set(2, 2, 1);
         System.out.println("Test vaux : \n");
         System.out.println(test);
-        System.out.println("Sa matrice inverse est : \n");
+        test = test.concatCol(Matrice.identite(3));
+        System.out.println("Après descente de Gauss : \n");
         test.descenteGauss();
+        System.out.println(test);
+        System.out.println("Sa matrice inverse est : \n");
         test.remontéeGauss();
         test.diagUnitaire();
         System.out.println(test);

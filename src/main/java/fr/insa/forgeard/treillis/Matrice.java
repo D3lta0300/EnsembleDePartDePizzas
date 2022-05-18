@@ -109,8 +109,7 @@ public class Matrice {
         if (this.getNbrLig() != n.getNbrLig()) {
             throw new Error("nombre de cols incompatible");
         }
-        Matrice res = new Matrice(this.getNbrLig(),
-                this.getNbrCol() + n.getNbrCol());
+        Matrice res = new Matrice(this.getNbrLig(), this.getNbrCol() + n.getNbrCol());
         for (int i = 0; i < this.getNbrLig(); i++) {
             for (int j = 0; j < this.getNbrCol(); j++) {
                 res.set(i, j, this.get(i, j));
