@@ -65,6 +65,7 @@ public class App extends Application {
         HBox coordonneespts = new HBox();
         HBox hbox1 = new HBox();
         HBox hbox2 = new HBox();
+        HBox hbox3 = new HBox();
         
         //création canvas
         Canvas canvas = new Canvas();
@@ -124,10 +125,20 @@ public class App extends Application {
         ComboBox comboBox2 = new ComboBox();
         hbox2.getChildren().add(comboBox2);
         
-        pointscreate.getChildren().add(hbox2);
+        
         
         Button button2 = new Button("Créer");
-        pointscreate.getChildren().add(button2);
+        hbox2.getChildren().add(button2);
+        
+        pointscreate.getChildren().add(hbox2);
+        
+        ComboBox comboBox3 = new ComboBox();
+        hbox3.getChildren().add(comboBox3);
+        
+        Button button3 = new Button("Supprimer");
+        hbox3.getChildren().add(button3);
+        
+        pointscreate.getChildren().add(hbox3);
         
         
         button1.setOnAction(new EventHandler<ActionEvent>(){
@@ -143,6 +154,7 @@ public class App extends Application {
                 graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
                 comboBox1.getItems().add(i);
                 comboBox2.getItems().add(i);
+                comboBox3.getItems().add(i);
                 Noeud n = new Noeud(xpos, ypos) {
                     @Override
                     public int nombreInconnue() {
@@ -157,6 +169,7 @@ public class App extends Application {
                 graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
                 comboBox1.getItems().add(i);
                 comboBox2.getItems().add(i);
+                comboBox3.getItems().add(i);
                 Noeud n = new Noeud(xpos, ypos) {
                     @Override
                     public int nombreInconnue() {
@@ -172,6 +185,7 @@ public class App extends Application {
                 graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
                 comboBox1.getItems().add(i);
                 comboBox2.getItems().add(i);
+                comboBox3.getItems().add(i);
                 Noeud n = new Noeud(xpos, ypos) {
                     @Override
                     public int nombreInconnue() {
@@ -212,7 +226,14 @@ public class App extends Application {
         graphics_context.strokeLine(treillis.getNoeudByID(j).getPx()+5, -(treillis.getNoeudByID(j).getPy()-5-350), treillis.getNoeudByID(l).getPx()+5, -(treillis.getNoeudByID(l).getPy()-5-350));
     }
         });
-        
+        button3.setOnAction(new EventHandler<ActionEvent>(){
+  
+    public void handle(ActionEvent event){
+        j = (int) comboBox3.getValue();
+        treillis.deleteNoeud(j);     
+    }
+    });
+    
         
         
         
