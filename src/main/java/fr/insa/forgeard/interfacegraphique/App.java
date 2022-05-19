@@ -35,6 +35,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 
 /**
@@ -44,6 +45,11 @@ public class App extends Application {
     private int xpos;
     private int ypos;
     private int i = 1;
+    private int posx;
+    private int posy;
+    private int j = 0;
+    private int l = 0;
+    
     
 
     
@@ -92,7 +98,7 @@ public class App extends Application {
         coordonneespts.getChildren().add(x);
         
         TextField xinput = new TextField();
-        xinput.setPrefWidth(30);
+        xinput.setPrefWidth(50);
         xinput.setPrefHeight(8);
         coordonneespts.getChildren().add(xinput);
         
@@ -100,7 +106,7 @@ public class App extends Application {
         coordonneespts.getChildren().add(y);
         
         TextField yinput = new TextField();
-        yinput.setPrefWidth(30);
+        yinput.setPrefWidth(50);
         yinput.setPrefHeight(8);
         coordonneespts.getChildren().add(yinput);
         pointscreate.getChildren().add(coordonneespts);
@@ -134,9 +140,9 @@ public class App extends Application {
         //Si noeud double, alors noeud en 
         if (comboBox.getValue() == "Noeud Double"){
             graphics_context.setFill(Color.RED);
-            graphics_context.fillOval(xpos-1, ypos-1, 10, 10 );
-            comboBox1.getItems().add("N"+i);
-            comboBox2.getItems().add("N"+i);
+            graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
+            comboBox1.getItems().add(i);
+            comboBox2.getItems().add(i);
             Noeud n = new Noeud(xpos, ypos) {
                 @Override
                 public int nombreInconnue() {
@@ -148,9 +154,9 @@ public class App extends Application {
         
         if (comboBox.getValue() == "Noeud Simple"){
             graphics_context.setFill(Color.BLUE);
-            graphics_context.fillOval(xpos-1, ypos-1, 10, 10 );
-            comboBox1.getItems().add("N"+i);
-            comboBox2.getItems().add("N"+i);
+            graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
+            comboBox1.getItems().add(i);
+            comboBox2.getItems().add(i);
             Noeud n = new Noeud(xpos, ypos) {
                 @Override
                 public int nombreInconnue() {
@@ -163,9 +169,9 @@ public class App extends Application {
             
         if (comboBox.getValue() == "Noeud Appui"){
             graphics_context.setFill(Color.GREEN);
-            graphics_context.fillOval(xpos-1, ypos-1, 10, 10 );
-            comboBox1.getItems().add("N"+i);
-            comboBox2.getItems().add("N"+i);
+            graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
+            comboBox1.getItems().add(i);
+            comboBox2.getItems().add(i);
             Noeud n = new Noeud(xpos, ypos) {
                 @Override
                 public int nombreInconnue() {
@@ -175,12 +181,36 @@ public class App extends Application {
             treillis.addNoeud(n);
         }
         i=i+1;
-        System.out.println(treillis);
+ 
+        //graphics_context.clearRect(0, 0,1000, 700);
+        //graphics_context.setFill(Color.LIGHTGREY);
+        //graphics_context.fillRect(0, 0, 1000, 700);
     
+        //for (int i = 0; i<treillis.getNoeuds().size(); i++) {
+            
+            //graphics_context.setFill(Color.GREEN);
+            //graphics_context.fillOval(treillis.getNoeudByID(i).getPx()-1, treillis.getNoeudByID(i).getPy()-1, 10, 10 );
+            //System.out.println(treillis.getNoeudByID(i).getPx());
+            //System.out.println(treillis.getNoeudByID(i).getPy());
+            
+        //}
 }
 });
        
-        
+        button2.setOnAction(new EventHandler<ActionEvent>(){
+  
+    public void handle(ActionEvent event){
+        System.out.println(comboBox1.getItems());
+        j = (int) comboBox1.getValue();
+        l = (int) comboBox2.getValue();
+    
+        Barre b = new Barre(treillis.getNoeudByID(j),treillis.getNoeudByID(l));
+        Line line = new Line();
+        graphics_context.setStroke(Color.BLUE);
+        graphics_context.setLineWidth(3);
+        graphics_context.strokeLine(treillis.getNoeudByID(j).getPx()+5, treillis.getNoeudByID(j).getPy()+5, treillis.getNoeudByID(l).getPx()+5, treillis.getNoeudByID(l).getPy()+5);
+    }
+        });
         
         
         
