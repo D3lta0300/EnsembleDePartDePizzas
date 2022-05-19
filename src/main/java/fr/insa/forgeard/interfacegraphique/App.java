@@ -9,6 +9,7 @@ import java.io.IOException;
 import javafx.scene.image.Image;
 
 import fr.insa.forgeard.treillis.Barre;
+import fr.insa.forgeard.treillis.Treillis;
 import fr.insa.forgeard.treillis.Noeud;
 import fr.insa.forgeard.treillis.NoeudAppuiDouble;
 import fr.insa.forgeard.treillis.NoeudAppuiSimple;
@@ -42,6 +43,8 @@ import javafx.scene.paint.Color;
 public class App extends Application {
     private int xpos;
     private int ypos;
+    private int i = 1;
+    
 
     
     @Override
@@ -55,6 +58,7 @@ public class App extends Application {
         VBox pointscreate = new VBox();
         HBox coordonneespts = new HBox();
         HBox hbox1 = new HBox();
+        HBox hbox2 = new HBox();
         
         //création canvas
         Canvas canvas = new Canvas();
@@ -104,30 +108,89 @@ public class App extends Application {
         // Button créer un point
         Button button1= new Button("Créer !");
         pointscreate.getChildren().add(button1);
+        
+        Label label1 = new Label("Nouvelle barre :");
+        pointscreate.getChildren().add(label1);
+        
+        ComboBox comboBox1 = new ComboBox();
+        hbox2.getChildren().add(comboBox1);
+        
+        ComboBox comboBox2 = new ComboBox();
+        hbox2.getChildren().add(comboBox2);
+        
+        pointscreate.getChildren().add(hbox2);
+        
+        Button button2 = new Button("Créer");
+        pointscreate.getChildren().add(button2);
+        
+        
         button1.setOnAction(new EventHandler<ActionEvent>(){
   
     public void handle(ActionEvent event){
         xpos = Integer.parseInt(xinput.getText());
         ypos = Integer.parseInt(yinput.getText());
-        System.out.println("Position x :" + xpos);
-        System.out.println("Position y :" + ypos);
-        System.out.println(comboBox.getValue());
+        
         
         //Si noeud double, alors noeud en 
-        if (comboBox.getValue() == "Noeud Double")
+        if (comboBox.getValue() == "Noeud Double"){
             graphics_context.setFill(Color.RED);
-        graphics_context.fillOval(xpos-1, ypos-1, 5, 5 );
-        if (comboBox.getValue() == "Noeud Simple")
-            graphics_context.setFill(Color.BLUE);
-        graphics_context.fillOval(xpos-1, ypos-1, 5, 5 );
-        if (comboBox.getValue() == "Noeud Appui")
-            graphics_context.setFill(Color.GREEN);
-        graphics_context.fillOval(xpos-1, ypos-1, 5, 5 );
+            graphics_context.fillOval(xpos-1, ypos-1, 10, 10 );
+            comboBox1.getItems().add("N"+i);
+            comboBox2.getItems().add("N"+i);
+            Noeud n = new Noeud(xpos, ypos) {
+                @Override
+                public int nombreInconnue() {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+            };
+            treillis.addNoeud(n);
+        }
         
+        if (comboBox.getValue() == "Noeud Simple"){
+            graphics_context.setFill(Color.BLUE);
+            graphics_context.fillOval(xpos-1, ypos-1, 10, 10 );
+            comboBox1.getItems().add("N"+i);
+            comboBox2.getItems().add("N"+i);
+            Noeud n = new Noeud(xpos, ypos) {
+                @Override
+                public int nombreInconnue() {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+            };
+            treillis.addNoeud(n);
+        }
+
+            
+        if (comboBox.getValue() == "Noeud Appui"){
+            graphics_context.setFill(Color.GREEN);
+            graphics_context.fillOval(xpos-1, ypos-1, 10, 10 );
+            comboBox1.getItems().add("N"+i);
+            comboBox2.getItems().add("N"+i);
+            Noeud n = new Noeud(xpos, ypos) {
+                @Override
+                public int nombreInconnue() {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+            };
+            treillis.addNoeud(n);
+        }
+        i=i+1;
+        System.out.println(treillis);
     
 }
 });
        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         //position bordepane
         root.setLeft(pointscreate);
