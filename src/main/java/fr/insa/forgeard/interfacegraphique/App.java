@@ -158,7 +158,7 @@ public class App extends Application {
                     }
 
                     if (comboBox.getValue() == "Noeud Appui Simple") {
-                        
+
                         NoeudAppuiSimple n = new NoeudAppuiSimple(xpos, ypos);
                         treillis.addNoeud(n);
                     }
@@ -180,11 +180,7 @@ public class App extends Application {
                 Barre b = new Barre(treillis.getNoeudByID(j), treillis.getNoeudByID(l));
                 System.out.println(b);
                 treillis.addBarre(b);
-                Line line = new Line();
-                graphics_context.setStroke(Color.BLUE);
-                graphics_context.setLineWidth(3);
-                graphics_context.strokeLine(treillis.getNoeudByID(j).getPx() + 5, -(treillis.getNoeudByID(j).getPy() - 5 - 350), treillis.getNoeudByID(l).getPx() + 5, -(treillis.getNoeudByID(l).getPy() - 5 - 350));
-
+                
                 redraw(graphics_context, comboBox1, comboBox2, comboBox3, treillis);
 
             }
@@ -233,31 +229,55 @@ public class App extends Application {
         comboBox1.getItems().clear();
         comboBox2.getItems().clear();
         comboBox3.getItems().clear();
-        for (int k = 0; k < treillis.getBarres().size(); k++) {
-            Barre barre1 = treillis.getBarres().get(k);
+        for (Barre barre1 : treillis.getBarres()) {
             Noeud node2 = barre1.getNoeudArrive();
             Noeud node3 = barre1.getNoeudDepart();
-            graphics_context.setFill(Color.BLUE);
+            graphics_context.setFill(barreColor(barre1.getForce()));
             graphics_context.setLineWidth(3);
             graphics_context.strokeLine(node2.getPx() + 5, -(node2.getPy() - 5 - 350), node3.getPx() + 5, -(node3.getPy() - 5 - 350));
 
         }
         for (int k = 0; k < treillis.getNoeuds().size(); k++) {
-            comboBox1.getItems().add(k+1);
-            comboBox2.getItems().add(k+1);
-            comboBox3.getItems().add(k+1);
-            if (treillis.getNoeudByID(k).nombreInconnue() == 0){
+            comboBox1.getItems().add(k + 1);
+            comboBox2.getItems().add(k + 1);
+            comboBox3.getItems().add(k + 1);
+            if (treillis.getNoeudByID(k).nombreInconnue() == 0) {
                 graphics_context.setFill(Color.GREEN);
             }
-            if (treillis.getNoeudByID(k).nombreInconnue() == 1){
+            if (treillis.getNoeudByID(k).nombreInconnue() == 1) {
                 graphics_context.setFill(Color.RED);
             }
-            if (treillis.getNoeudByID(k).nombreInconnue() == 2){
+            if (treillis.getNoeudByID(k).nombreInconnue() == 2) {
                 graphics_context.setFill(Color.BLACK);
             }
             Noeud node1 = treillis.getNoeuds().get(k);
             graphics_context.fillOval(node1.getPx(), -(node1.getPy() - 350), 10, 10);
         }
+    }
+
+    public static Color barreColor(double force) {
+        double percent = force / 20 + 0.5;
+        return lerp(new Color(1,0.5,1/3,1), new Color(0,0,1,1), percent);
+    }
+
+    /**
+     * Calculates the linear interpolation between a and b with the given
+     * percent
+     *
+     * @param a
+     * @param b
+     * @param percent
+     * @return
+     */
+    public static Color lerp(Color a, Color b, double percent) {
+        double red = lerp(a.getRed(), b.getRed(), percent);
+        double blue = lerp(a.getBlue(), b.getBlue(), percent);
+        double green = lerp(a.getGreen(), b.getGreen(), percent);
+        return new Color(red, green, blue, 1);
+    }
+    
+    public static double lerp(double a, double b, double percent){
+        return a*percent + b*(1-percent);
     }
 
 }
