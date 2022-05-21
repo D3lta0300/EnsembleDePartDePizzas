@@ -90,9 +90,9 @@ public class App extends Application {
         hbox1.getChildren().add(typepoint);
 
         ComboBox comboBox = new ComboBox();
-        comboBox.getItems().add("Noeud Double");
+        comboBox.getItems().add("Noeud Appui Double");
         comboBox.getItems().add("Noeud Simple");
-        comboBox.getItems().add("Noeud Appui");
+        comboBox.getItems().add("Noeud Appui Simple");
         hbox1.getChildren().add(comboBox);
 
         Label x = new Label("X:");
@@ -146,45 +146,20 @@ public class App extends Application {
 
                 if ((xpos >= 0) && (xpos <= 1000) && (ypos <= 350) && (ypos >= -350)) {
                     //Si noeud double, alors noeud en 
-                    if (comboBox.getValue() == "Noeud Double") {
-
-                        //comboBox1.getItems().add(i);
-                        //comboBox2.getItems().add(i);
-                        //comboBox3.getItems().add(i);
-                        Noeud n = new Noeud(xpos, ypos) {
-                            @Override
-                            public int nombreInconnue() {
-                                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-                            }
-                        };
+                    if (comboBox.getValue() == "Noeud Appui Double") {
+                        NoeudAppuiDouble n = new NoeudAppuiDouble(xpos, ypos);
                         treillis.addNoeud(n);
                     }
 
                     if (comboBox.getValue() == "Noeud Simple") {
 
-                        //comboBox1.getItems().add(i);
-                        //comboBox2.getItems().add(i);
-                        //comboBox3.getItems().add(i);
-                        Noeud n = new Noeud(xpos, ypos) {
-                            @Override
-                            public int nombreInconnue() {
-                                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-                            }
-                        };
+                        NoeudSimple n = new NoeudSimple(xpos, ypos);
                         treillis.addNoeud(n);
                     }
 
-                    if (comboBox.getValue() == "Noeud Appui") {
-
-                        //comboBox1.getItems().add(i);
-                        //comboBox2.getItems().add(i);
-                        //comboBox3.getItems().add(i);
-                        Noeud n = new Noeud(xpos, ypos) {
-                            @Override
-                            public int nombreInconnue() {
-                                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-                            }
-                        };
+                    if (comboBox.getValue() == "Noeud Appui Simple") {
+                        
+                        NoeudAppuiSimple n = new NoeudAppuiSimple(xpos, ypos);
                         treillis.addNoeud(n);
                     }
                     i = i + 1;
@@ -271,7 +246,15 @@ public class App extends Application {
             comboBox1.getItems().add(k+1);
             comboBox2.getItems().add(k+1);
             comboBox3.getItems().add(k+1);
-            graphics_context.setFill(Color.GREEN);
+            if (treillis.getNoeudByID(k).nombreInconnue() == 0){
+                graphics_context.setFill(Color.GREEN);
+            }
+            if (treillis.getNoeudByID(k).nombreInconnue() == 1){
+                graphics_context.setFill(Color.RED);
+            }
+            if (treillis.getNoeudByID(k).nombreInconnue() == 2){
+                graphics_context.setFill(Color.BLACK);
+            }
             Noeud node1 = treillis.getNoeuds().get(k);
             graphics_context.fillOval(node1.getPx(), -(node1.getPy() - 350), 10, 10);
         }
