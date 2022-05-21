@@ -53,6 +53,8 @@ public class App extends Application {
     private Noeud node2;
     private Noeud node3;
     private Barre barre1;
+    private int Forcex;
+    private int Forcey;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -68,6 +70,8 @@ public class App extends Application {
         HBox hbox2 = new HBox();
         HBox hbox3 = new HBox();
         HBox hbox4 = new HBox();
+        HBox hbox5 = new HBox();
+        HBox hbox6 = new HBox();
 
         //création canvas
         Canvas canvas = new Canvas();
@@ -154,6 +158,30 @@ public class App extends Application {
         pointscreate.getChildren().add(hbox4);
         
         
+        Label label4 = new Label("Ajouter des efforts :");
+        pointscreate.getChildren().add(label4);
+        Label label5 = new Label("Noeuds :");
+        ComboBox comboBox5 = new ComboBox();
+        Label label6 = new Label("Sur x : ");
+        Label label7 = new Label("Sur y : ");
+        TextField Fx = new TextField();
+        Fx.setPrefWidth(50);
+        Fx.setPrefHeight(8);
+        TextField Fy = new TextField();
+        Fy.setPrefWidth(50);
+        Fy.setPrefHeight(8);
+        hbox5.getChildren().add(label5);
+        hbox5.getChildren().add(comboBox5);
+        hbox6.getChildren().add(label6);
+        hbox6.getChildren().add(Fx);
+        hbox6.getChildren().add(label7);
+        hbox6.getChildren().add(Fy);
+        Button button5 = new Button("Ajouter force");
+        
+        pointscreate.getChildren().add(hbox5);
+        pointscreate.getChildren().add(hbox6);
+        pointscreate.getChildren().add(button5);
+        
         button1.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
@@ -182,7 +210,7 @@ public class App extends Application {
 
                 }
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
 
             }
         });
@@ -197,7 +225,7 @@ public class App extends Application {
                 System.out.println(b);
                 treillis.addBarre(b);
                 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
 
             }
         });
@@ -208,7 +236,7 @@ public class App extends Application {
 
                 treillis.deleteNoeud(j);
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
 
             }
 
@@ -220,10 +248,20 @@ public class App extends Application {
 
                 treillis.getBarres().remove(j-1);
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
 
             }
 
+        });
+        button5.setOnAction(new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent event) {
+                Forcex = Integer.parseInt(Fx.getText());
+                Forcey = Integer.parseInt(Fy.getText());
+                int n = (int)comboBox5.getValue();
+                treillis.forces(new Vecteur2D(Forcex,Forcey), n);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
+            }
         });
 
         //position bordepane
@@ -249,7 +287,7 @@ public class App extends Application {
         launch();
     }
 
-    public static void redraw(GraphicsContext graphics_context, ComboBox comboBox1, ComboBox comboBox2, ComboBox comboBox3, ComboBox comboBox4, Treillis treillis) {
+    public static void redraw(GraphicsContext graphics_context, ComboBox comboBox1, ComboBox comboBox2, ComboBox comboBox3, ComboBox comboBox4, ComboBox comboBox5, Treillis treillis) {
         //Efface et redessinne tout le treillis
         graphics_context.clearRect(0, 0, 1000, 700);
         graphics_context.setFill(Color.LIGHTGREY);
@@ -258,6 +296,7 @@ public class App extends Application {
         comboBox2.getItems().clear();
         comboBox3.getItems().clear();
         comboBox4.getItems().clear();
+        comboBox5.getItems().clear();
         int s =1;
         for (Barre barre1 : treillis.getBarres()) {
             comboBox4.getItems().add(s);
@@ -273,6 +312,8 @@ public class App extends Application {
             comboBox1.getItems().add(k + 1);
             comboBox2.getItems().add(k + 1);
             comboBox3.getItems().add(k + 1);
+            comboBox5.getItems().add(k+1);
+            System.out.println(treillis.getNoeudByID(k).nombreInconnue());
             if (treillis.getNoeudByID(k).nombreInconnue() == 0) {
                 graphics_context.setFill(Color.GREEN);
             }
