@@ -15,6 +15,15 @@ public class Barre {
     private Noeud noeudDepart, noeudArrive;
     private double tractionMax, compressionMax;
     private double coûtMetre;
+    private double force;
+    
+    public void setForce(double force){
+        this.force = force;
+    }
+    
+    public double getForce(){
+        return this.force;
+    }
 
     public Noeud getNoeudDepart() {
         return noeudDepart;
@@ -72,6 +81,7 @@ public class Barre {
         noeudArrive.getBarresArrive().add(this);
         this.tractionMax = tractionMax;
         this.coûtMetre = coûtMetre;
+        this.force = 0.0;
     }
 
     public Barre(Noeud noeudDepart, Noeud noeudArrive) {

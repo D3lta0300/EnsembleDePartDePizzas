@@ -274,6 +274,11 @@ public class Treillis {
                 resultat.set(i,0,coefs.get(i, 2*ns));
             }
         }
+        
+        for (Barre b:this.getBarres()){
+            b.setForce(resultat.get(b.getID()-1, 0));
+        }
+        
         return resultat;
     }
 
