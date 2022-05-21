@@ -4,6 +4,7 @@
  */
 package fr.insa.forgeard.treillis;
 //V1 !
+
 /**
  *
  * @author titouan
@@ -34,8 +35,8 @@ public class Barre {
     public int getID() {
         return id;
     }
-    
-    public void setID(int id){
+
+    public void setID(int id) {
         this.id = id;
     }
 
@@ -72,33 +73,36 @@ public class Barre {
         this.tractionMax = tractionMax;
         this.coûtMetre = coûtMetre;
     }
-    
-    public Barre(Noeud noeudDepart, Noeud noeudArrive){
-        this(0, noeudDepart, noeudArrive,0.0,0.0,0.0);
+
+    public Barre(Noeud noeudDepart, Noeud noeudArrive) {
+        this(0, noeudDepart, noeudArrive, 0.0, 0.0, 0.0);
     }
 
     @Override
     public String toString() {
         return "Barre{" + "id=" + id + ", noeudDepart=" + noeudDepart + ", noeudArrive=" + noeudArrive + '}';
     }
-    
-    
-    public Noeud noeudOppose(Noeud in){
+
+    public Noeud noeudOppose(Noeud in) {
         Noeud out = new NoeudSimple();
-        if (in == this.noeudArrive){
+        if (in == this.noeudArrive) {
             out = this.noeudDepart;
-        } else if (in == this.noeudDepart){
+        } else if (in == this.noeudDepart) {
             out = this.noeudArrive;
         } else {
             throw new Error("Le noeud ne correspond pas");
         }
         return out;
     }
-    
-    public double angle(Noeud n){
-        double a = n.getPx()-this.noeudOppose(n).getPx();
-        double b = n.getPy()-this.noeudOppose(n).getPy();
-        return Math.atan2(b, a);
+
+    public double angle(Noeud n) {
+        if (n == this.noeudArrive || n == this.noeudDepart) {
+            double a = this.noeudOppose(n).getPx() - n.getPx();
+            double b = this.noeudOppose(n).getPy() - n.getPy();
+            return Math.atan2(b, a);
+        } else {
+            return 0;
+        }
     }
 
 }

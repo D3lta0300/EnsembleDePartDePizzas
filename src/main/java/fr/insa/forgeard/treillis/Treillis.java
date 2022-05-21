@@ -220,14 +220,60 @@ public class Treillis {
         }
     }
     
-    public void Forces(Vecteur2D force, int noeudID){
+    public Matrice forces(Vecteur2D force, int noeudID){
         this.getNoeudByID(noeudID).setForce(force);
         
-        //test d'inversibilité
+        int ns = this.getNoeuds().size();
+        int nb = this.getBarres().size();
+        int nsas = 0;
+        int nsad = 0;
         
-        //définition de la matrice
+        for (Noeud n : this.getNoeuds()){ //compte les noeuds appui double et simple
+            if (n.nombreInconnue()==1){
+                nsas++;
+            } else if (n.nombreInconnue() == 2){
+                nsad++;
+            }
+        }
         
-        //calcul des forces
+        Matrice resultat = new Matrice(2*ns,1);
+        
+        if (2*ns!=nb+nsas+2*nsad){ //test d'inversibilité
+            System.out.println("La matrice n'est pas soluble.");
+        } else {
+            Matrice coefs = new Matrice(2*ns,2*ns);
+            int nombreReactions = 0;
+            //définition de la matrice
+            for (Noeud n : this.getNoeuds()){
+                for (Barre b : n.barresIncidentes()){
+                    coefs.set(n.getID()-1, b.getID()-1, b.angle(n));
+                    coefs.set(n.getID(), b.getID()-1, b.angle(n));
+                }
+                if (n.nombreInconnue()==1){
+                    coefs.set(n.getID(), nb+nombreReactions, 1);
+                    nombreReactions++;
+                } else if (n.nombreInconnue()==2){
+                    coefs.set(n.getID()-1, nb+nombreReactions, 1);
+                    nombreReactions++;
+                    coefs.set(n.getID(), nb+nombreReactions, 1);
+                    nombreReactions++;
+                }
+            }
+            //calcul des forces
+            Matrice forces = new Matrice(2*ns,1);
+            forces.set(noeudID-1,0, force.getPx());
+            forces.set(noeudID, 0, force.getPy());
+            
+            coefs.concatCol(forces);
+            coefs.descenteGauss();
+            coefs.remontéeGauss();
+            
+            //résultats
+            for (int i =0; i<2*ns;i++){
+                resultat.set(i,0,coefs.get(i, 2*ns));
+            }
+        }
+        return resultat;
     }
 
     public static void menuTexte() {
