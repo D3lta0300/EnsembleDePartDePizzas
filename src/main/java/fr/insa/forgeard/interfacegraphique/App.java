@@ -199,13 +199,11 @@ public class App extends Application {
         button2.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
-                j = (int) comboBox1.getValue() - 1;
-                l = (int) comboBox2.getValue() - 1;
-                if (j == 0) {
-                    j = 1;
-                }
+                j = (int) comboBox1.getValue();
+                l = (int) comboBox2.getValue();
 
                 Barre b = new Barre(treillis.getNoeudByID(j), treillis.getNoeudByID(l));
+                System.out.println(b);
                 treillis.addBarre(b);
                 Line line = new Line();
                 graphics_context.setStroke(Color.BLUE);
@@ -260,15 +258,6 @@ public class App extends Application {
         comboBox1.getItems().clear();
         comboBox2.getItems().clear();
         comboBox3.getItems().clear();
-        for (int k = 0; k < treillis.getNoeuds().size(); k++) {
-            comboBox1.getItems().add(treillis.getNoeudByID(k).getID() + 1);
-            comboBox2.getItems().add(treillis.getNoeudByID(k).getID() + 1);
-            comboBox3.getItems().add(treillis.getNoeudByID(k).getID() + 1);
-            graphics_context.setFill(Color.GREEN);
-            Noeud node1 = treillis.getNoeuds().get(k);
-            graphics_context.fillOval(node1.getPx(), -(node1.getPy() - 350), 10, 10);
-        }
-
         for (int k = 0; k < treillis.getBarres().size(); k++) {
             Barre barre1 = treillis.getBarres().get(k);
             Noeud node2 = barre1.getNoeudArrive();
@@ -277,6 +266,14 @@ public class App extends Application {
             graphics_context.setLineWidth(3);
             graphics_context.strokeLine(node2.getPx() + 5, -(node2.getPy() - 5 - 350), node3.getPx() + 5, -(node3.getPy() - 5 - 350));
 
+        }
+        for (int k = 0; k < treillis.getNoeuds().size(); k++) {
+            comboBox1.getItems().add(k+1);
+            comboBox2.getItems().add(k+1);
+            comboBox3.getItems().add(k+1);
+            graphics_context.setFill(Color.GREEN);
+            Noeud node1 = treillis.getNoeuds().get(k);
+            graphics_context.fillOval(node1.getPx(), -(node1.getPy() - 350), 10, 10);
         }
     }
 
