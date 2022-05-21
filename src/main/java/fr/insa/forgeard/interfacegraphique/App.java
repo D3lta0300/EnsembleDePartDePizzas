@@ -67,6 +67,7 @@ public class App extends Application {
         HBox hbox1 = new HBox();
         HBox hbox2 = new HBox();
         HBox hbox3 = new HBox();
+        HBox hbox4 = new HBox();
 
         //création canvas
         Canvas canvas = new Canvas();
@@ -132,12 +133,27 @@ public class App extends Application {
 
         ComboBox comboBox3 = new ComboBox();
         hbox3.getChildren().add(comboBox3);
+        ComboBox comboBox4 = new ComboBox();
+        hbox4.getChildren().add(comboBox4);
 
         Button button3 = new Button("Supprimer");
         hbox3.getChildren().add(button3);
+        
+        
+        Label label2 = new Label("Supprimer point:");
+        pointscreate.getChildren().add(label2);
 
+
+        Button button4 = new Button("Supprimer");
+        hbox4.getChildren().add(button4);
+        
         pointscreate.getChildren().add(hbox3);
 
+        Label label3 = new Label("Supprimer barre:");
+        pointscreate.getChildren().add(label3);
+        pointscreate.getChildren().add(hbox4);
+        
+        
         button1.setOnAction(new EventHandler<ActionEvent>() {
 
             public void handle(ActionEvent event) {
@@ -166,7 +182,7 @@ public class App extends Application {
 
                 }
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, treillis);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
 
             }
         });
@@ -181,7 +197,7 @@ public class App extends Application {
                 System.out.println(b);
                 treillis.addBarre(b);
                 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, treillis);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
 
             }
         });
@@ -192,7 +208,19 @@ public class App extends Application {
 
                 treillis.deleteNoeud(j);
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, treillis);
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
+
+            }
+
+        });
+        button4.setOnAction(new EventHandler<ActionEvent>() {
+
+            public void handle(ActionEvent event) {
+                j = (int) comboBox4.getValue();
+
+                treillis.getBarres().remove(j-1);
+
+                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, treillis);
 
             }
 
@@ -221,7 +249,7 @@ public class App extends Application {
         launch();
     }
 
-    public static void redraw(GraphicsContext graphics_context, ComboBox comboBox1, ComboBox comboBox2, ComboBox comboBox3, Treillis treillis) {
+    public static void redraw(GraphicsContext graphics_context, ComboBox comboBox1, ComboBox comboBox2, ComboBox comboBox3, ComboBox comboBox4, Treillis treillis) {
         //Efface et redessinne tout le treillis
         graphics_context.clearRect(0, 0, 1000, 700);
         graphics_context.setFill(Color.LIGHTGREY);
@@ -229,7 +257,11 @@ public class App extends Application {
         comboBox1.getItems().clear();
         comboBox2.getItems().clear();
         comboBox3.getItems().clear();
+        comboBox4.getItems().clear();
+        int s =1;
         for (Barre barre1 : treillis.getBarres()) {
+            comboBox4.getItems().add(s);
+            s = s+1;
             Noeud node2 = barre1.getNoeudArrive();
             Noeud node3 = barre1.getNoeudDepart();
             graphics_context.setFill(barreColor(barre1.getForce()));
