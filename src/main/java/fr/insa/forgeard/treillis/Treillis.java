@@ -202,7 +202,22 @@ public class Treillis {
         } else {
             System.out.println("There is an error.");
         }
-
+        this.rearrangeID();
+    }
+    
+    //réarrange les ID pour que les numéros se suivent
+    public void rearrangeID(){
+        int i = 1;
+        
+        for (Noeud n : this.getNoeuds()){
+            n.setID(i);
+            i++;
+        }
+        i=1;
+        for (Barre b : this.getBarres()){
+            b.setID(i);
+            i++;
+        }
     }
     
     public void Forces(Vecteur2D force, int noeudID){
