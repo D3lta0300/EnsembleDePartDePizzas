@@ -19,14 +19,14 @@ public class Treillis {
     private List<Barre> barres;
 
     /**
-     * @return the noeuds
+     * @return les noeuds
      */
     public List<Noeud> getNoeuds() {
         return noeuds;
     }
 
     /**
-     * @param noeuds the noeuds to set
+     * @param noeuds the nodes to set
      */
     public void setNoeuds(List<Noeud> noeuds) {
         this.noeuds = noeuds;
@@ -40,17 +40,25 @@ public class Treillis {
     }
 
     /**
-     * @param barres the barres to set
+     * @param barres les barres à ajouter
      */
     public void setBarres(List<Barre> barres) {
         this.barres = barres;
     }
 
+    /**
+     * Constructeur
+     * @param noeuds
+     * @param barres 
+     */
     public Treillis(List<Noeud> noeuds, List<Barre> barres) {
         this.noeuds = noeuds;
         this.barres = barres;
     }
 
+    /**
+     * Constructeur vide
+     */
     public Treillis() {
         this(new ArrayList<Noeud>(), new ArrayList<Barre>());
     }
@@ -86,9 +94,13 @@ public class Treillis {
         return a;
     }
 
+    /**
+     * Ajoute un noeud au treillis, modifie également son ID pour correspondre au treillis.
+     * @param n 
+     */
     public void addNoeud(Noeud n) {
         for (Noeud a : this.noeuds) {
-            if (n == a) {
+            if (n == a) { //verifie que l'on est pas en train d'essayer d'ajouter un noeud existant déjà
                 throw new Error("Le noeud existe deja");
             }
         }
@@ -96,6 +108,10 @@ public class Treillis {
         this.noeuds.add(n);
     }
 
+    /**
+     * Ajoute un noeud au treillis, modifie également son ID pour correspondre au treillis.
+     * @param nouvelleBarre 
+     */
     public void addBarre(Barre nouvelleBarre) {
 
         //Verifie que l'on est pas en train d'ajouter une barre deja existente
@@ -105,8 +121,8 @@ public class Treillis {
             }
         }
 
-        //Verifie la presence des noeuds de depart et d'arrive
-        boolean testArrive = true;
+        //Verifie la presence des noeuds de depart et d'arrive dans le treillis
+        boolean testArrive = true; //Ces variables passe à false si un même est détectée
         boolean testDepart = true;
         for (Noeud noeud : this.noeuds) {
             if (noeud == nouvelleBarre.getNoeudArrive()) {
@@ -116,7 +132,7 @@ public class Treillis {
                 testDepart = false;
             }
         }
-        if (testArrive) {
+        if (testArrive) { //ajoute les noeuds au treillis si ils n'y sont pas déjà
             this.noeuds.add(nouvelleBarre.getNoeudArrive());
         }
         if (testDepart) {
@@ -177,10 +193,14 @@ public class Treillis {
         return out;
     }
 
+    /**
+     * Supprime un noeuds à condition qu'il n'y est pas de barres l'utilisant
+     * @param id 
+     */
     public void deleteNoeud(int id) {
         List<Integer> barresProblemmatique = new ArrayList<Integer>();
         boolean deletable = true;
-        for (Barre b : this.barres) {
+        for (Barre b : this.barres) { //vérifie qu'aucune barre n'est reliée au noeud
             if (b.getNoeudArrive().getID() == id) {
                 barresProblemmatique.add(b.getID());
                 deletable = false;
@@ -190,22 +210,23 @@ public class Treillis {
             }
         }
 
-        if (deletable) {
+        if (deletable) { //supprime le noeuds
             this.getNoeuds().remove(this.getNoeudByID(id));
             System.out.println("Le noeud a bien été supprimé");
-        } else if (!deletable) {
+        } else if (!deletable) { //informe l'utilisateur que ce n'est pas possible
             System.out.print("Les barres aux ID suivantes empêchent la suppression du noeud " + id + " : ");
             for (int i : barresProblemmatique) {
                 System.out.print(i + " ; ");
             }
             System.out.println("");
-        } else {
-            System.out.println("There is an error.");
         }
+        
         this.rearrangeID();
     }
     
-    //réarrange les ID pour que les numéros se suivent
+    /**
+     * réarrange les ID pour que les numéros se suivent
+     */
     public void rearrangeID(){
         int i = 1;
         
@@ -220,13 +241,19 @@ public class Treillis {
         }
     }
     
+    /**
+     * Calculs les forces s'exercants dans le treillis
+     * @param force
+     * @param noeudID
+     * @return 
+     */
     public Matrice forces(Vecteur2D force, int noeudID){
         this.getNoeudByID(noeudID).setForce(force);
         
-        int ns = this.getNoeuds().size();
-        int nb = this.getBarres().size();
-        int nsas = 0;
-        int nsad = 0;
+        int ns = this.getNoeuds().size(); //nombre de noeuds
+        int nb = this.getBarres().size(); //nombre de barres
+        int nsas = 0; //nombre de noeuds appui simple
+        int nsad = 0; //nombre de noeuds appui double
         
         for (Noeud n : this.getNoeuds()){ //compte les noeuds appui double et simple
             if (n.nombreInconnue()==1){
@@ -236,31 +263,35 @@ public class Treillis {
             }
         }
         
-        Matrice resultat = new Matrice(2*ns,1);
+        Matrice resultat = new Matrice(2*ns,1); //matrice qui contiendra le résultat
         
         if (2*ns!=nb+nsas+2*nsad){ //test d'inversibilité
             System.out.println("La matrice n'est pas soluble.");
         } else {
-            Matrice coefs = new Matrice(2*ns,2*ns);
-            int nombreReactions = 0;
+            Matrice coefs = new Matrice(2*ns,2*ns); //créé la matrice qui correspondra au système d'équations
+            int nombreReactions = 0; //variable permettant de s'assurer de la position des réactions dans la matrice
+            
             //définition de la matrice
-            for (Noeud n : this.getNoeuds()){
+            for (Noeud n : this.getNoeuds()){ //place les indices correspondant du système d'équation dans la matrice
                 for (Barre b : n.barresIncidentes()){
                     coefs.set(n.getID()-1, b.getID()-1, b.angle(n));
                     coefs.set(n.getID(), b.getID()-1, b.angle(n));
                 }
-                if (n.nombreInconnue()==1){
+                if (n.nombreInconnue()==1){ //gère les appuis simple
                     coefs.set(n.getID(), nb+nombreReactions, 1);
                     nombreReactions++;
-                } else if (n.nombreInconnue()==2){
+                } else if (n.nombreInconnue()==2){ //gère les appuis double
                     coefs.set(n.getID()-1, nb+nombreReactions, 1);
                     nombreReactions++;
                     coefs.set(n.getID(), nb+nombreReactions, 1);
                     nombreReactions++;
                 }
             }
+            
             //calcul des forces
+            
             Matrice forces = new Matrice(2*ns,1);
+            //ajoute les conditions initiales
             forces.set(noeudID-1,0, force.getPx());
             forces.set(noeudID, 0, force.getPy());
             
@@ -275,13 +306,16 @@ public class Treillis {
             }
         }
         
-        for (Barre b:this.getBarres()){
+        for (Barre b:this.getBarres()){ //ajoute les résultats dans les barres correspondantes
             b.setForce(resultat.get(b.getID()-1, 0));
         }
         
         return resultat;
     }
 
+    /**
+     * Un menu permettant de tester le fonctionnement des principales méthodes du treillis.
+     */
     public static void menuTexte() {
         System.out.println("Bienvenue dans l'éditeur de treillis ! Vous pouvez quitter un menu à tout moment en entrant \"0\"");
         int action = 1;
@@ -289,7 +323,7 @@ public class Treillis {
         Scanner scanner = new Scanner(System.in);
         while (action != 0) {
 
-            //initialisation
+            //initialisation des deux premiers noeuds et du tablier
             if (treillis.getNoeuds().isEmpty()) {
                 System.out.println("Vous devez dans un premier temps définir les points d'ancrages. \n \n Quel est la coordonnée x du noeud appui double ? :");
                 double x = scanner.nextDouble();
@@ -305,11 +339,12 @@ public class Treillis {
                 Noeud n2 = new NoeudAppuiSimple(x, y);
                 treillis.addNoeud(n2);
 
-                treillis.addBarre(new Barre(n1, n2));
+                treillis.addBarre(new Barre(n1, n2)); //correspondra au tablier
 
                 System.out.println("Information : Une barre correspondant au tablier a été ajoutée entre ces noeuds. \n");
             }
-
+            
+            //menu principale
             System.out.println(treillis);
             System.out.println("Que voulez vous faire ? :\n  - Entrez \"1\" pour ajouter un élément.\n  - Entrez \"2\" pour en supprimer un.\n");
             action = scanner.nextInt();
@@ -317,6 +352,7 @@ public class Treillis {
             
             if (action == 1) {
                 while (action != 0) {
+                    //menu secondaire 1, ajouter des éléments
                     System.out.println("Quel type d'élément souhaitez vous ajouter ? (1 = barre ; 2 = noeud");
                     action = scanner.nextInt();
                     
@@ -350,6 +386,7 @@ public class Treillis {
                 action = 1;
             } else if (action == 2) {
                 while (action != 0) {
+                    //menu secondaire 2, supprime des éléments
                     System.out.println("Que souhaitez vous supprimer ?\n  - 1 : une barre\n  - 2 : un noeud \n \n");
                     action = scanner.nextInt();
 
