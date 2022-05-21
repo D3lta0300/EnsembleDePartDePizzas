@@ -4,8 +4,6 @@
  */
 package fr.insa.forgeard.treillis;
 
-//import java.io.Console;
-import java.util.Scanner;
 
 /**
  *
@@ -15,28 +13,33 @@ public class Test {
 
     public static void main(String[] args) {
         
-        Integer a = 3;
-        Integer b = 7;
-        Matrice test = new Matrice(3,3);
-        test.set(0, 0, 0);
-        test.set(0, 1, -5);
-        test.set(0, 2, -5);
-        test.set(1, 0, -2);
-        test.set(1, 1, -4);
-        test.set(1, 2, -2);
-        test.set(2, 0, 4);
-        test.set(2, 1, 3);
-        test.set(2, 2, 1);
-        System.out.println("Test vaux : \n");
-        System.out.println(test);
-        test = test.concatCol(Matrice.identite(3));
-        System.out.println("Après descente de Gauss : \n");
-        test.descenteGauss();
-        System.out.println(test);
-        System.out.println("Sa matrice inverse est : \n");
-        test.remontéeGauss();
-        test.diagUnitaire();
-        System.out.println(test);
+        System.out.println("alpha 1");
+        System.out.println(Math.atan2(-3, -1));
+        System.out.println("alpha3");
+        System.out.println(Math.atan2(3, 1));
+        System.out.println("omega1");
+        System.out.println(Math.atan2(-3, 1));
+        System.out.println("omega2");
+        System.out.println(Math.atan2(3, -1));
+        
+        Treillis treillis = new Treillis();
+        Noeud n1,n2,n3;
+        n1 = new NoeudSimple(2,3);
+        n2 = new NoeudAppuiSimple(3, 0);
+        n3 = new NoeudAppuiDouble(1,0);
+        treillis.addNoeud(n1);
+        treillis.addNoeud(n2);
+        treillis.addNoeud(n3);
+        Barre b1, b2, b3;
+        b1 = new Barre(n1, n3);
+        b2 = new Barre(n2,n3);
+        b3 = new Barre(n1,n2);
+        treillis.addBarre(b1);
+        treillis.addBarre(b2);
+        treillis.addBarre(b3);
+        
+        Vecteur2D force = new Vecteur2D(1, 2);
+        treillis.forces(force, 3);
         
     }
 }

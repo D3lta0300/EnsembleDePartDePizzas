@@ -286,8 +286,8 @@ public class Treillis {
             //définition de la matrice
             for (Noeud n : this.getNoeuds()) { //place les indices correspondant du système d'équation dans la matrice
                 for (Barre b : n.barresIncidentes()) {
-                    coefs.set(n.getID() - 1, b.getID() - 1, b.angle(n));
-                    coefs.set(n.getID(), b.getID() - 1, b.angle(n));
+                    coefs.set(n.getID() - 1, b.getID() - 1, Math.cos(b.angle(n)));
+                    coefs.set(n.getID(), b.getID() - 1, Math.sin(b.angle(n)));
                 }
                 if (n.nombreInconnue() == 1) { //gère les appuis simple
                     coefs.set(n.getID(), nb + nombreReactions, 1);
@@ -305,8 +305,13 @@ public class Treillis {
             //ajoute les conditions initiales
             forces.set(noeudID - 1, 0, force.getPx());
             forces.set(noeudID, 0, force.getPy());
-
+            
+            
             coefs.concatCol(forces);
+            
+            System.out.println("La matrice a inverser est :");
+            System.out.println(coefs);
+            
             coefs.descenteGauss();
             coefs.remontéeGauss();
             coefs.diagUnitaire();
