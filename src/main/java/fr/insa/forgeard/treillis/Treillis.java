@@ -267,6 +267,7 @@ public class Treillis {
             coefs.concatCol(forces);
             coefs.descenteGauss();
             coefs.remontéeGauss();
+            coefs.diagUnitaire();
             
             //résultats
             for (int i =0; i<2*ns;i++){
