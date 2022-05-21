@@ -154,11 +154,10 @@ public class App extends Application {
         if ((xpos>=0)&&(xpos<=1000)&&(ypos<=350)&&(ypos>=-350)){
         //Si noeud double, alors noeud en 
             if (comboBox.getValue() == "Noeud Double"){
-                //graphics_context.setFill(Color.RED);
-                //graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
-                comboBox1.getItems().add(i);
-                comboBox2.getItems().add(i);
-                comboBox3.getItems().add(i);
+                
+                //comboBox1.getItems().add(i);
+                //comboBox2.getItems().add(i);
+                //comboBox3.getItems().add(i);
                 Noeud n = new Noeud(xpos, ypos) {
                     @Override
                     public int nombreInconnue() {
@@ -169,11 +168,10 @@ public class App extends Application {
             }
         
             if (comboBox.getValue() == "Noeud Simple"){
-                //graphics_context.setFill(Color.BLUE);
-                //graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
-                comboBox1.getItems().add(i);
-                comboBox2.getItems().add(i);
-                comboBox3.getItems().add(i);
+                
+                //comboBox1.getItems().add(i);
+                //comboBox2.getItems().add(i);
+                //comboBox3.getItems().add(i);
                 Noeud n = new Noeud(xpos, ypos) {
                     @Override
                     public int nombreInconnue() {
@@ -185,11 +183,10 @@ public class App extends Application {
 
             
             if (comboBox.getValue() == "Noeud Appui"){
-                //graphics_context.setFill(Color.GREEN);
-                //graphics_context.fillOval(xpos, -(ypos-350), 10, 10 );
-                comboBox1.getItems().add(i);
-                comboBox2.getItems().add(i);
-                comboBox3.getItems().add(i);
+                
+                //comboBox1.getItems().add(i);
+                //comboBox2.getItems().add(i);
+                //comboBox3.getItems().add(i);
                 Noeud n = new Noeud(xpos, ypos) {
                     @Override
                     public int nombreInconnue() {
@@ -201,16 +198,24 @@ public class App extends Application {
             i=i+1;
 
         }
-        
-        
+       
         
         
         //Efface et redessinne tout le treillis
         graphics_context.clearRect(0, 0,1000, 700);
         graphics_context.setFill(Color.LIGHTGREY);
         graphics_context.fillRect(0, 0, 1000, 700);
+        
+        comboBox1.getItems().clear();
+        comboBox2.getItems().clear();
+        comboBox3.getItems().clear();
+        
+        
         for (int k = 0; k < treillis.getNoeuds().size(); k++) {
-            
+            System.out.println(treillis.getNoeudByID(k).getID());
+            comboBox1.getItems().add(treillis.getNoeudByID(k).getID()+1);
+            comboBox2.getItems().add(treillis.getNoeudByID(k).getID()+1);
+            comboBox3.getItems().add(treillis.getNoeudByID(k).getID()+1);
             graphics_context.setFill(Color.GREEN);
             node1 = treillis.getNoeuds().get(k);
             graphics_context.fillOval(node1.getPx(), -(node1.getPy()-350), 10, 10 );
@@ -232,19 +237,58 @@ public class App extends Application {
         button2.setOnAction(new EventHandler<ActionEvent>(){
   
     public void handle(ActionEvent event){
-        System.out.println(comboBox1.getItems());
-        j = (int) comboBox1.getValue();
-        l = (int) comboBox2.getValue();
+        j = (int) comboBox1.getValue()-1;
+        l = (int) comboBox2.getValue()-1;
+        if (j==0) {
+            j=1;
+        }
     
         Barre b = new Barre(treillis.getNoeudByID(j),treillis.getNoeudByID(l));
+        treillis.addBarre(b);
         Line line = new Line();
         graphics_context.setStroke(Color.BLUE);
         graphics_context.setLineWidth(3);
         graphics_context.strokeLine(treillis.getNoeudByID(j).getPx()+5, -(treillis.getNoeudByID(j).getPy()-5-350), treillis.getNoeudByID(l).getPx()+5, -(treillis.getNoeudByID(l).getPy()-5-350));
+        
+
+        
+        
+        //Efface et redessinne tout le treillis
+        graphics_context.clearRect(0, 0,1000, 700);
+        graphics_context.setFill(Color.LIGHTGREY);
+        graphics_context.fillRect(0, 0, 1000, 700);
+        comboBox1.getItems().clear();
+        comboBox2.getItems().clear();
+        comboBox3.getItems().clear();
+        for (int k = 0; k < treillis.getNoeuds().size(); k++) {
+            comboBox1.getItems().add(treillis.getNoeudByID(k).getID()+1);
+            comboBox2.getItems().add(treillis.getNoeudByID(k).getID()+1);
+            comboBox3.getItems().add(treillis.getNoeudByID(k).getID()+1);
+            graphics_context.setFill(Color.GREEN);
+            node1 = treillis.getNoeuds().get(k);
+            graphics_context.fillOval(node1.getPx(), -(node1.getPy()-350), 10, 10 );
+        }
+        
+        for (int k = 0; k < treillis.getBarres().size(); k++){
+            barre1 = treillis.getBarres().get(k);
+            node2 = barre1.getNoeudArrive();
+            node3 = barre1.getNoeudDepart();
+            graphics_context.setFill(Color.BLUE);
+            graphics_context.setLineWidth(3);
+            graphics_context.strokeLine(node2.getPx()+5, -(node2.getPy()-5-350), node3.getPx()+5, -(node3.getPy()-5-350));
+            
+        }
+    
+    
+    
+    
+    
+    
     }
         });
         button3.setOnAction(new EventHandler<ActionEvent>(){
   
+            
     public void handle(ActionEvent event){
         j = (int) comboBox3.getValue();
         
@@ -255,8 +299,13 @@ public class App extends Application {
         graphics_context.clearRect(0, 0,1000, 700);
         graphics_context.setFill(Color.LIGHTGREY);
         graphics_context.fillRect(0, 0, 1000, 700);
+        comboBox1.getItems().clear();
+        comboBox2.getItems().clear();
+        comboBox3.getItems().clear();
         for (int k = 0; k < treillis.getNoeuds().size(); k++) {
-            
+            comboBox1.getItems().add(treillis.getNoeudByID(k).getID()+1);
+            comboBox2.getItems().add(treillis.getNoeudByID(k).getID()+1);
+            comboBox3.getItems().add(treillis.getNoeudByID(k).getID()+1);
             graphics_context.setFill(Color.GREEN);
             node1 = treillis.getNoeuds().get(k);
             graphics_context.fillOval(node1.getPx(), -(node1.getPy()-350), 10, 10 );
