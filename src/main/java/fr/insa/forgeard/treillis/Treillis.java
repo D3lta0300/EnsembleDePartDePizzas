@@ -378,7 +378,6 @@ public class Treillis {
             String str = inputReader.readLine();
             while ("End of File" != str) {
                 String[] informations = str.split(" ");
-                str = inputReader.readLine();
                 if (informations[3] == "0") {
                     this.getNoeuds().add(new NoeudSimple(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
                 } else if (informations[3] == "1") {
@@ -386,6 +385,7 @@ public class Treillis {
                 } else if (informations[3] == "2") {
                     this.getNoeuds().add(new NoeudAppuiDouble(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
                 }
+                str = inputReader.readLine();
             }
         } catch (IOException er) {
             System.out.println(er);
