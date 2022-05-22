@@ -44,14 +44,8 @@ public class App extends Application {
 
     private int xpos;
     private int ypos;
-    private int posx;
-    private int posy;
     private int j = 0;
     private int l = 0;
-    private Noeud node1;
-    private Noeud node2;
-    private Noeud node3;
-    private Barre barre1;
     private int Forcex;
     private int Forcey;
 
@@ -63,14 +57,14 @@ public class App extends Application {
         BorderPane root = new BorderPane();
 
         //créer les boites
-        VBox pointscreate = new VBox();
-        HBox coordonneespts = new HBox();
-        HBox hbox1 = new HBox();
+        VBox vbox = new VBox();
+        HBox hBoxCoordonneesPts = new HBox();
+        HBox hBoxTypePoint = new HBox();
         HBox hbox2 = new HBox();
         HBox hbox3 = new HBox();
         HBox hbox4 = new HBox();
         HBox hbox5 = new HBox();
-        HBox hbox6 = new HBox();
+        HBox hBoxForces = new HBox();
 
         //création canvas
         Canvas canvas = new Canvas();
@@ -87,41 +81,41 @@ public class App extends Application {
 
         //Onglet création de points
         Label barredecla = new Label("Création de point :");
-        pointscreate.getChildren().add(barredecla);
+        vbox.getChildren().add(barredecla);
 
         Label typepoint = new Label("Type de point :");
-        hbox1.getChildren().add(typepoint);
+        hBoxTypePoint.getChildren().add(typepoint);
 
-        ComboBox comboBox = new ComboBox();
-        comboBox.getItems().add("Noeud Simple");
-        comboBox.getItems().add("Noeud Appui Double");
-        comboBox.getItems().add("Noeud Appui Simple");
-        hbox1.getChildren().add(comboBox);
+        ComboBox comboBoxTypeNoeud = new ComboBox();
+        comboBoxTypeNoeud.getItems().add("Noeud Simple");
+        comboBoxTypeNoeud.getItems().add("Noeud Appui Double");
+        comboBoxTypeNoeud.getItems().add("Noeud Appui Simple");
+        hBoxTypePoint.getChildren().add(comboBoxTypeNoeud);
 
         Label x = new Label("X:");
-        coordonneespts.getChildren().add(x);
+        hBoxCoordonneesPts.getChildren().add(x);
 
         TextField xinput = new TextField();
         xinput.setPrefWidth(50);
         xinput.setPrefHeight(8);
-        coordonneespts.getChildren().add(xinput);
+        hBoxCoordonneesPts.getChildren().add(xinput);
 
         Label y = new Label("Y:");
-        coordonneespts.getChildren().add(y);
+        hBoxCoordonneesPts.getChildren().add(y);
 
         TextField yinput = new TextField();
         yinput.setPrefWidth(50);
         yinput.setPrefHeight(8);
-        coordonneespts.getChildren().add(yinput);
-        pointscreate.getChildren().add(coordonneespts);
-        pointscreate.getChildren().add(hbox1);
+        hBoxCoordonneesPts.getChildren().add(yinput);
+        vbox.getChildren().add(hBoxCoordonneesPts);
+        vbox.getChildren().add(hBoxTypePoint);
 
         // Boutton créer un point
-        Button button1 = new Button("Créer !");
-        pointscreate.getChildren().add(button1);
+        Button bouttonCréerN = new Button("Créer !");
+        vbox.getChildren().add(bouttonCréerN);
 
-        Label label1 = new Label("Nouvelle barre :");
-        pointscreate.getChildren().add(label1);
+        Label labelNouvelleBarre = new Label("Nouvelle barre :");
+        vbox.getChildren().add(labelNouvelleBarre);
 
         ComboBox comboBox1 = new ComboBox();
         hbox2.getChildren().add(comboBox1);
@@ -129,33 +123,33 @@ public class App extends Application {
         ComboBox comboBox2 = new ComboBox();
         hbox2.getChildren().add(comboBox2);
 
-        Button button2 = new Button("Créer");
-        hbox2.getChildren().add(button2);
+        Button bouttonCréerBarre = new Button("Créer");
+        hbox2.getChildren().add(bouttonCréerBarre);
 
-        pointscreate.getChildren().add(hbox2);
+        vbox.getChildren().add(hbox2);
 
         ComboBox comboBox3 = new ComboBox();
         hbox3.getChildren().add(comboBox3);
         ComboBox comboBox4 = new ComboBox();
         hbox4.getChildren().add(comboBox4);
 
-        Button button3 = new Button("Supprimer");
-        hbox3.getChildren().add(button3);
+        Button bouttonSupprimerN = new Button("Supprimer");
+        hbox3.getChildren().add(bouttonSupprimerN);
 
         Label label2 = new Label("Supprimer point:");
-        pointscreate.getChildren().add(label2);
+        vbox.getChildren().add(label2);
 
-        Button button4 = new Button("Supprimer");
-        hbox4.getChildren().add(button4);
+        Button bouttonSupprimerBarre = new Button("Supprimer");
+        hbox4.getChildren().add(bouttonSupprimerBarre);
 
-        pointscreate.getChildren().add(hbox3);
+        vbox.getChildren().add(hbox3);
 
         Label label3 = new Label("Supprimer barre:");
-        pointscreate.getChildren().add(label3);
-        pointscreate.getChildren().add(hbox4);
+        vbox.getChildren().add(label3);
+        vbox.getChildren().add(hbox4);
 
         Label label4 = new Label("Ajouter des efforts :");
-        pointscreate.getChildren().add(label4);
+        vbox.getChildren().add(label4);
         Label label5 = new Label("Noeuds :");
         ComboBox comboBox5 = new ComboBox();
         Label label6 = new Label("Sur x : ");
@@ -168,35 +162,35 @@ public class App extends Application {
         Fy.setPrefHeight(8);
         hbox5.getChildren().add(label5);
         hbox5.getChildren().add(comboBox5);
-        hbox6.getChildren().add(label6);
-        hbox6.getChildren().add(Fx);
-        hbox6.getChildren().add(label7);
-        hbox6.getChildren().add(Fy);
-        Button button5 = new Button("Ajouter force");
+        hBoxForces.getChildren().add(label6);
+        hBoxForces.getChildren().add(Fx);
+        hBoxForces.getChildren().add(label7);
+        hBoxForces.getChildren().add(Fy);
+        Button bouttonAjouterForce = new Button("Ajouter force");
 
-        pointscreate.getChildren().add(hbox5);
-        pointscreate.getChildren().add(hbox6);
-        pointscreate.getChildren().add(button5);
+        vbox.getChildren().add(hbox5);
+        vbox.getChildren().add(hBoxForces);
+        vbox.getChildren().add(bouttonAjouterForce);
 
         //créer un point
-        button1.setOnAction((ActionEvent event) -> {
+        bouttonCréerN.setOnAction((ActionEvent event) -> {
             xpos = Integer.parseInt(xinput.getText());
             ypos = Integer.parseInt(yinput.getText());
 
             if ((xpos >= 0) && (xpos <= 1000) && (ypos <= 350) && (ypos >= -350)) {
                 //Si noeud double, alors noeud en
-                if (comboBox.getValue() == "Noeud Appui Double") {
+                if (comboBoxTypeNoeud.getValue() == "Noeud Appui Double") {
                     Noeud n = new NoeudAppuiDouble(xpos, ypos);
                     treillis.addNoeud(n);
                 }
 
-                if (comboBox.getValue() == "Noeud Simple") {
+                if (comboBoxTypeNoeud.getValue() == "Noeud Simple") {
 
                     Noeud n = new NoeudSimple(xpos, ypos);
                     treillis.addNoeud(n);
                 }
 
-                if (comboBox.getValue() == "Noeud Appui Simple") {
+                if (comboBoxTypeNoeud.getValue() == "Noeud Appui Simple") {
 
                     Noeud n = new NoeudAppuiSimple(xpos, ypos);
                     treillis.addNoeud(n);
@@ -208,7 +202,7 @@ public class App extends Application {
         });
 
         //Créer une barre
-        button2.setOnAction((ActionEvent event) -> {
+        bouttonCréerBarre.setOnAction((ActionEvent event) -> {
             j = (int) comboBox1.getValue();
             l = (int) comboBox2.getValue();
 
@@ -221,7 +215,7 @@ public class App extends Application {
         });
 
         //supprimer un noeud
-        button3.setOnAction((ActionEvent event) -> {
+        bouttonSupprimerN.setOnAction((ActionEvent event) -> {
             j = (int) comboBox3.getValue();
 
             treillis.deleteNoeud(j);
@@ -230,16 +224,17 @@ public class App extends Application {
         });
 
         //supprimer une barre
-        button4.setOnAction((ActionEvent event) -> {
+        bouttonSupprimerBarre.setOnAction((ActionEvent event) -> {
             j = (int) comboBox4.getValue();
 
             treillis.getBarres().remove(j - 1);
+            treillis.rearrangeID();
 
             redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
         });
 
         //ajouter une force
-        button5.setOnAction((ActionEvent event) -> {
+        bouttonAjouterForce.setOnAction((ActionEvent event) -> {
             Forcex = Integer.parseInt(Fx.getText());
             Forcey = Integer.parseInt(Fy.getText());
             int n = (int) comboBox5.getValue();
@@ -248,7 +243,7 @@ public class App extends Application {
         });
 
         //position bordepane
-        root.setLeft(pointscreate);
+        root.setLeft(vbox);
         //root.setLeft(coordonneespts);
 
         //canvas
@@ -270,6 +265,17 @@ public class App extends Application {
         launch();
     }
 
+    /**
+     * Redessine le treillis et met à jour les comboBox
+     * 
+     * @param graphics_context
+     * @param comboBox1
+     * @param comboBox2
+     * @param comboBox3
+     * @param comboBox4
+     * @param comboBox5
+     * @param treillis 
+     */
     public static void redraw(GraphicsContext graphics_context, ComboBox comboBox1, ComboBox comboBox2, ComboBox comboBox3, ComboBox comboBox4, ComboBox comboBox5, Treillis treillis) {
         //debug
         System.out.println(treillis);
@@ -328,7 +334,12 @@ public class App extends Application {
      * @return
      */
     public static Color barreColor(double force) {
-        double percent = force / 20 + 0.5;
+        double percent = force / 50 + 0.5;
+        if (percent<0){
+            percent = 0;
+        } else if (percent >1){
+            percent = 1;
+        }
         return lerp(new Color(1, 0.5, 1 / 3, 1), new Color(0, 0, 1, 1), percent);
     }
 
