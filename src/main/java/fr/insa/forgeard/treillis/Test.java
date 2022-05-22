@@ -24,8 +24,8 @@ public class Test {
         
         Treillis treillis = new Treillis();
         Noeud n1,n2,n3;
-        n1 = new NoeudSimple(2,3);
-        n2 = new NoeudAppuiSimple(3, 0);
+        n1 = new NoeudSimple(0,0);
+        n2 = new NoeudAppuiSimple(3, 1);
         n3 = new NoeudAppuiDouble(1,0);
         treillis.addNoeud(n1);
         treillis.addNoeud(n2);
@@ -45,6 +45,8 @@ public class Test {
         
         Vecteur2D force = new Vecteur2D(1, 2);
         treillis.forces(force, 1);
+        
+        treillis.save(Treillis.choseFile());
         
     }
 }

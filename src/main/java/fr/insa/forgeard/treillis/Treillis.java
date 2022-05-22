@@ -4,15 +4,16 @@
  */
 package fr.insa.forgeard.treillis;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -286,16 +287,16 @@ public class Treillis {
             //définition de la matrice
             for (Noeud n : this.getNoeuds()) { //place les indices correspondant du système d'équation dans la matrice
                 for (Barre b : n.barresIncidentes()) {
-                    coefs.set((n.getID() - 1)*2, b.getID() - 1, Math.cos(b.angle(n)));
-                    coefs.set(n.getID()*2-1, b.getID() - 1, Math.sin(b.angle(n)));
+                    coefs.set((n.getID() - 1) * 2, b.getID() - 1, Math.cos(b.angle(n)));
+                    coefs.set(n.getID() * 2 - 1, b.getID() - 1, Math.sin(b.angle(n)));
                 }
                 if (n.nombreInconnue() == 1) { //gère les appuis simple
-                    coefs.set(n.getID()*2-2, nb + nombreReactions, 1);
+                    coefs.set(n.getID() * 2 - 2, nb + nombreReactions, 1);
                     nombreReactions++;
                 } else if (n.nombreInconnue() == 2) { //gère les appuis double
-                    coefs.set(n.getID()*2 - 2, nb + nombreReactions, 1);
+                    coefs.set(n.getID() * 2 - 2, nb + nombreReactions, 1);
                     nombreReactions++;
-                    coefs.set(n.getID()*2-1, nb + nombreReactions, 1);
+                    coefs.set(n.getID() * 2 - 1, nb + nombreReactions, 1);
                     nombreReactions++;
                 }
             }
@@ -303,15 +304,14 @@ public class Treillis {
             //calcul des forces
             Matrice forces = new Matrice(2 * ns, 1);
             //ajoute les conditions initiales
-            forces.set(noeudID*2 - 2, 0, force.getPx());
-            forces.set(noeudID*2-1, 0, force.getPy());
-            
-            
+            forces.set(noeudID * 2 - 2, 0, force.getPx());
+            forces.set(noeudID * 2 - 1, 0, force.getPy());
+
             coefs = coefs.concatCol(forces);
-            
+
             System.out.println("La matrice a inverser est :");
             System.out.println(coefs);
-            
+
             coefs.descenteGauss();
             coefs.remontéeGauss();
             coefs.diagUnitaire();
@@ -328,26 +328,70 @@ public class Treillis {
 
         return resultat;
     }
-/*
-    public void save() {
-        throws IOException{
-            File path = new File("/home/titouan/Bureau/test.txt");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-            try (writer) {
-                // Calling writer.write() method with string
-                writer.write(
-                        "Geeks for Geeks \nWelcome to computer science portal \nHello Geek!!!");
-            } // Catch block to handle the exceptions
-            catch (IOException e) {
-                // Print message as exception occured
-                // when invalid path from local machine is
-                // passed
-                System.out.print("Invalid Path");
-            }
+    /**
+     * Permet de sauvegarde le treillis
+     *
+     * @param str
+     */
+    public void save(String str) {
+        String test = "";
+
+        //ajouter les noeuds au fichier à enregistrer
+        for (Noeud n : this.getNoeuds()) {
+            test += n.getID() + " " + n.getPx() + " " + n.getPy() + " " + n.nombreInconnue() + "\n";
+        }
+        test += "End of File";
+
+        try {
+            FileWriter path = new FileWriter(str);
+            BufferedWriter out = new BufferedWriter(path);
+            out.write(test);
+            out.close();
+        } catch (IOException er) {
+            System.out.println(er);
         }
     }
-*/
+
+    public static String choseFile() {
+        String out = "";
+        JFileChooser filechoose = new JFileChooser(); // Créer un JFileChooser
+        filechoose.setCurrentDirectory(new File(".")); // Le répertoire source du JFileChooser est le répertoire d'où est lancé notre programme
+        String approve = "ENREGISTRER"; // Le bouton pour valider l'enregistrement portera la mention ENREGSITRER
+        int resultatEnregistrer = filechoose.showDialog(filechoose, approve); // Pour afficher le JFileChooser...
+        if (resultatEnregistrer == JFileChooser.APPROVE_OPTION) { // Si l'utilisateur clique sur le bouton ENREGSITRER
+            String monFichier = filechoose.getSelectedFile().toString(); // Récupérer le nom du fichier qu'il a spécifié
+            if (monFichier.endsWith(".txt") || monFichier.endsWith(".TXT")) {// Si ce nom de fichier finit par .txt ou .TXT, ne rien faire et passer à la suite
+            } else {
+                monFichier = monFichier + ".txt";
+            }
+            out = monFichier;
+        }
+        return out;
+    }
+
+    public void load(String path) {
+        BufferedReader inputReader;
+        try {
+            File inputFile = new File(path);
+            inputReader = new BufferedReader(new FileReader(inputFile));
+            String str = inputReader.readLine();
+            while ("End of File" != str) {
+                String[] informations = str.split(" ");
+                str = inputReader.readLine();
+                if (informations[3] == "0") {
+                    this.getNoeuds().add(new NoeudSimple(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
+                } else if (informations[3] == "1") {
+                    this.getNoeuds().add(new NoeudAppuiSimple(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
+                } else if (informations[3] == "2") {
+                    this.getNoeuds().add(new NoeudAppuiDouble(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
+                }
+            }
+        } catch (IOException er) {
+            System.out.println(er);
+        }
+    }
+
     /**
      * Un menu permettant de tester le fonctionnement des principales méthodes
      * du treillis.
