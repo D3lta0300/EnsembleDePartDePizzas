@@ -286,16 +286,16 @@ public class Treillis {
             //définition de la matrice
             for (Noeud n : this.getNoeuds()) { //place les indices correspondant du système d'équation dans la matrice
                 for (Barre b : n.barresIncidentes()) {
-                    coefs.set(n.getID() - 1, b.getID() - 1, Math.cos(b.angle(n)));
-                    coefs.set(n.getID(), b.getID() - 1, Math.sin(b.angle(n)));
+                    coefs.set((n.getID() - 1)*2, b.getID() - 1, Math.cos(b.angle(n)));
+                    coefs.set(n.getID()*2-1, b.getID() - 1, Math.sin(b.angle(n)));
                 }
                 if (n.nombreInconnue() == 1) { //gère les appuis simple
-                    coefs.set(n.getID(), nb + nombreReactions, 1);
+                    coefs.set(n.getID()*2-2, nb + nombreReactions, 1);
                     nombreReactions++;
                 } else if (n.nombreInconnue() == 2) { //gère les appuis double
-                    coefs.set(n.getID() - 1, nb + nombreReactions, 1);
+                    coefs.set(n.getID()*2 - 2, nb + nombreReactions, 1);
                     nombreReactions++;
-                    coefs.set(n.getID(), nb + nombreReactions, 1);
+                    coefs.set(n.getID()*2-1, nb + nombreReactions, 1);
                     nombreReactions++;
                 }
             }
@@ -303,11 +303,11 @@ public class Treillis {
             //calcul des forces
             Matrice forces = new Matrice(2 * ns, 1);
             //ajoute les conditions initiales
-            forces.set(noeudID - 1, 0, force.getPx());
-            forces.set(noeudID, 0, force.getPy());
+            forces.set(noeudID*2 - 2, 0, force.getPx());
+            forces.set(noeudID*2-1, 0, force.getPy());
             
             
-            coefs.concatCol(forces);
+            coefs = coefs.concatCol(forces);
             
             System.out.println("La matrice a inverser est :");
             System.out.println(coefs);

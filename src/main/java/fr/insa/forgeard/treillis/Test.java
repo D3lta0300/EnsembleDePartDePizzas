@@ -38,8 +38,13 @@ public class Test {
         treillis.addBarre(b2);
         treillis.addBarre(b3);
         
+        System.out.println(n1.toString() + n2.toString() + n3.toString());
+        System.out.println(b1);
+        System.out.println(b2);
+        System.out.println(b3);
+        
         Vecteur2D force = new Vecteur2D(1, 2);
-        treillis.forces(force, 3);
+        treillis.forces(force, 1);
         
     }
 }
