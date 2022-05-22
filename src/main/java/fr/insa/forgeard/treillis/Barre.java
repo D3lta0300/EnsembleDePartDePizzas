@@ -90,7 +90,7 @@ public class Barre {
 
     @Override
     public String toString() {
-        return "Barre{" + "id=" + id + ", noeudDepart=" + noeudDepart + ", noeudArrive=" + noeudArrive + '}';
+        return "Barre{" + "id=" + id + ", noeudDepart=" + noeudDepart + ", noeudArrive=" + noeudArrive + "} \n";
     }
 
     public Noeud noeudOppose(Noeud in) {

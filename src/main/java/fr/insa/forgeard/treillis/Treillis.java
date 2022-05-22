@@ -71,7 +71,7 @@ public class Treillis {
 
     @Override
     public String toString() {
-        return "Treillis{" + "noeuds=" + noeuds + ", barres=" + barres + '}';
+        return "Treillis{" + "noeuds=" + noeuds + "\n barres=" + barres + '}';
     }
 
     /**

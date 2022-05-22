@@ -44,7 +44,6 @@ public class App extends Application {
 
     private int xpos;
     private int ypos;
-    private int i = 1;
     private int posx;
     private int posy;
     private int j = 0;
@@ -79,8 +78,7 @@ public class App extends Application {
         canvas.setWidth(1000);
 
         //Zone graphique
-        GraphicsContext graphics_context
-                = canvas.getGraphicsContext2D();
+        GraphicsContext graphics_context = canvas.getGraphicsContext2D();
         graphics_context.setFill(Color.LIGHTGREY);
         graphics_context.fillRect(0, 0, 1000, 700);
 
@@ -95,8 +93,8 @@ public class App extends Application {
         hbox1.getChildren().add(typepoint);
 
         ComboBox comboBox = new ComboBox();
-        comboBox.getItems().add("Noeud Appui Double");
         comboBox.getItems().add("Noeud Simple");
+        comboBox.getItems().add("Noeud Appui Double");
         comboBox.getItems().add("Noeud Appui Simple");
         hbox1.getChildren().add(comboBox);
 
@@ -117,7 +115,8 @@ public class App extends Application {
         coordonneespts.getChildren().add(yinput);
         pointscreate.getChildren().add(coordonneespts);
         pointscreate.getChildren().add(hbox1);
-        // Button créer un point
+
+        // Boutton créer un point
         Button button1 = new Button("Créer !");
         pointscreate.getChildren().add(button1);
 
@@ -142,22 +141,19 @@ public class App extends Application {
 
         Button button3 = new Button("Supprimer");
         hbox3.getChildren().add(button3);
-        
-        
+
         Label label2 = new Label("Supprimer point:");
         pointscreate.getChildren().add(label2);
 
-
         Button button4 = new Button("Supprimer");
         hbox4.getChildren().add(button4);
-        
+
         pointscreate.getChildren().add(hbox3);
 
         Label label3 = new Label("Supprimer barre:");
         pointscreate.getChildren().add(label3);
         pointscreate.getChildren().add(hbox4);
-        
-        
+
         Label label4 = new Label("Ajouter des efforts :");
         pointscreate.getChildren().add(label4);
         Label label5 = new Label("Noeuds :");
@@ -177,91 +173,78 @@ public class App extends Application {
         hbox6.getChildren().add(label7);
         hbox6.getChildren().add(Fy);
         Button button5 = new Button("Ajouter force");
-        
+
         pointscreate.getChildren().add(hbox5);
         pointscreate.getChildren().add(hbox6);
         pointscreate.getChildren().add(button5);
-        
-        button1.setOnAction(new EventHandler<ActionEvent>() {
 
-            public void handle(ActionEvent event) {
-                xpos = Integer.parseInt(xinput.getText());
-                ypos = Integer.parseInt(yinput.getText());
+        //créer un point
+        button1.setOnAction((ActionEvent event) -> {
+            xpos = Integer.parseInt(xinput.getText());
+            ypos = Integer.parseInt(yinput.getText());
 
-                if ((xpos >= 0) && (xpos <= 1000) && (ypos <= 350) && (ypos >= -350)) {
-                    //Si noeud double, alors noeud en 
-                    if (comboBox.getValue() == "Noeud Appui Double") {
-                        NoeudAppuiDouble n = new NoeudAppuiDouble(xpos, ypos);
-                        treillis.addNoeud(n);
-                    }
-
-                    if (comboBox.getValue() == "Noeud Simple") {
-
-                        NoeudSimple n = new NoeudSimple(xpos, ypos);
-                        treillis.addNoeud(n);
-                    }
-
-                    if (comboBox.getValue() == "Noeud Appui Simple") {
-
-                        NoeudAppuiSimple n = new NoeudAppuiSimple(xpos, ypos);
-                        treillis.addNoeud(n);
-                    }
-                    i = i + 1;
-
+            if ((xpos >= 0) && (xpos <= 1000) && (ypos <= 350) && (ypos >= -350)) {
+                //Si noeud double, alors noeud en
+                if (comboBox.getValue() == "Noeud Appui Double") {
+                    Noeud n = new NoeudAppuiDouble(xpos, ypos);
+                    treillis.addNoeud(n);
                 }
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
+                if (comboBox.getValue() == "Noeud Simple") {
+
+                    Noeud n = new NoeudSimple(xpos, ypos);
+                    treillis.addNoeud(n);
+                }
+
+                if (comboBox.getValue() == "Noeud Appui Simple") {
+
+                    Noeud n = new NoeudAppuiSimple(xpos, ypos);
+                    treillis.addNoeud(n);
+                }
 
             }
+
+            redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
         });
 
-        button2.setOnAction(new EventHandler<ActionEvent>() {
+        //Créer une barre
+        button2.setOnAction((ActionEvent event) -> {
+            j = (int) comboBox1.getValue();
+            l = (int) comboBox2.getValue();
 
-            public void handle(ActionEvent event) {
-                j = (int) comboBox1.getValue();
-                l = (int) comboBox2.getValue();
+            Barre b = new Barre(treillis.getNoeudByID(j), treillis.getNoeudByID(l));
 
-                Barre b = new Barre(treillis.getNoeudByID(j), treillis.getNoeudByID(l));
-                System.out.println(b);
-                treillis.addBarre(b);
-                
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
+            treillis.addBarre(b);
+            System.out.println(b);
 
-            }
+            redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
         });
-        button3.setOnAction(new EventHandler<ActionEvent>() {
 
-            public void handle(ActionEvent event) {
-                j = (int) comboBox3.getValue();
+        //supprimer un noeud
+        button3.setOnAction((ActionEvent event) -> {
+            j = (int) comboBox3.getValue();
 
-                treillis.deleteNoeud(j);
+            treillis.deleteNoeud(j);
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
-
-            }
-
+            redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
         });
-        button4.setOnAction(new EventHandler<ActionEvent>() {
 
-            public void handle(ActionEvent event) {
-                j = (int) comboBox4.getValue();
+        //supprimer une barre
+        button4.setOnAction((ActionEvent event) -> {
+            j = (int) comboBox4.getValue();
 
-                treillis.getBarres().remove(j-1);
+            treillis.getBarres().remove(j - 1);
 
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
-
-            }
-
+            redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
         });
-        button5.setOnAction(new EventHandler<ActionEvent>() {
 
-            public void handle(ActionEvent event) {
-                Forcex = Integer.parseInt(Fx.getText());
-                Forcey = Integer.parseInt(Fy.getText());
-                int n = (int)comboBox5.getValue();
-                treillis.forces(new Vecteur2D(Forcex,Forcey), n);
-                redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4,comboBox5, treillis);
-            }
+        //ajouter une force
+        button5.setOnAction((ActionEvent event) -> {
+            Forcex = Integer.parseInt(Fx.getText());
+            Forcey = Integer.parseInt(Fy.getText());
+            int n = (int) comboBox5.getValue();
+            treillis.forces(new Vecteur2D(Forcex, Forcey), n);
+            redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
         });
 
         //position bordepane
@@ -288,6 +271,9 @@ public class App extends Application {
     }
 
     public static void redraw(GraphicsContext graphics_context, ComboBox comboBox1, ComboBox comboBox2, ComboBox comboBox3, ComboBox comboBox4, ComboBox comboBox5, Treillis treillis) {
+        //debug
+        System.out.println(treillis);
+
         //Efface et redessinne tout le treillis
         graphics_context.clearRect(0, 0, 1000, 700);
         graphics_context.setFill(Color.LIGHTGREY);
@@ -297,10 +283,12 @@ public class App extends Application {
         comboBox3.getItems().clear();
         comboBox4.getItems().clear();
         comboBox5.getItems().clear();
-        int s =1;
+
         for (Barre barre1 : treillis.getBarres()) {
-            comboBox4.getItems().add(s);
-            s = s+1;
+
+            comboBox4.getItems().add(barre1.getID()); //ajoute les barres à la combobox
+
+            //dessine les barres
             Noeud node2 = barre1.getNoeudArrive();
             Noeud node3 = barre1.getNoeudDepart();
             graphics_context.setFill(barreColor(barre1.getForce()));
@@ -308,34 +296,44 @@ public class App extends Application {
             graphics_context.strokeLine(node2.getPx() + 5, -(node2.getPy() - 5 - 350), node3.getPx() + 5, -(node3.getPy() - 5 - 350));
 
         }
-        for (int k = 0; k < treillis.getNoeuds().size(); k++) {
-            comboBox1.getItems().add(k + 1);
-            comboBox2.getItems().add(k + 1);
-            comboBox3.getItems().add(k + 1);
-            comboBox5.getItems().add(k+1);
-            System.out.println(treillis.getNoeudByID(k).nombreInconnue());
-            if (treillis.getNoeudByID(k).nombreInconnue() == 0) {
+
+        for (Noeud n : treillis.getNoeuds()) {
+
+            //ajoute le noeud au comboBox
+            comboBox1.getItems().add(n.getID());
+            comboBox2.getItems().add(n.getID());
+            comboBox3.getItems().add(n.getID());
+            comboBox5.getItems().add(n.getID());
+
+            //Dessine le noeud, en variant la couleur selon son type.
+            if (n.nombreInconnue() == 0) {
                 graphics_context.setFill(Color.GREEN);
             }
-            if (treillis.getNoeudByID(k).nombreInconnue() == 1) {
+            if (n.nombreInconnue() == 1) {
                 graphics_context.setFill(Color.RED);
             }
-            if (treillis.getNoeudByID(k).nombreInconnue() == 2) {
+            if (n.nombreInconnue() == 2) {
                 graphics_context.setFill(Color.BLACK);
             }
-            Noeud node1 = treillis.getNoeuds().get(k);
-            graphics_context.fillOval(node1.getPx(), -(node1.getPy() - 350), 10, 10);
+
+            graphics_context.fillOval(n.getPx(), -(n.getPy() - 350), 10, 10);
         }
     }
 
+    /**
+     * Permet de faire varier la couleur des barres en fonction de la force
+     * s'exerçant sur celles-ci
+     *
+     * @param force
+     * @return
+     */
     public static Color barreColor(double force) {
         double percent = force / 20 + 0.5;
-        return lerp(new Color(1,0.5,1/3,1), new Color(0,0,1,1), percent);
+        return lerp(new Color(1, 0.5, 1 / 3, 1), new Color(0, 0, 1, 1), percent);
     }
 
     /**
-     * Calculates the linear interpolation between a and b with the given
-     * percent
+     * Calcul une couleur en utilisant une fonction lerp
      *
      * @param a
      * @param b
@@ -348,9 +346,17 @@ public class App extends Application {
         double green = lerp(a.getGreen(), b.getGreen(), percent);
         return new Color(red, green, blue, 1);
     }
-    
-    public static double lerp(double a, double b, double percent){
-        return a*percent + b*(1-percent);
+
+    /**
+     * Definition de la fonction lerp de base.
+     *
+     * @param a
+     * @param b
+     * @param percent
+     * @return
+     */
+    public static double lerp(double a, double b, double percent) {
+        return a * percent + b * (1 - percent);
     }
 
 }
