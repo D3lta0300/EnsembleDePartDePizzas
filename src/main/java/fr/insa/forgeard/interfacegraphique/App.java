@@ -3,9 +3,10 @@ package fr.insa.forgeard.interfacegraphique;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import java.net.URL;
 import java.io.IOException;
 import javafx.scene.image.Image;
+import java.net.URI;
 
 import fr.insa.forgeard.treillis.Barre;
 import fr.insa.forgeard.treillis.Noeud;
@@ -14,6 +15,10 @@ import fr.insa.forgeard.treillis.NoeudAppuiSimple;
 import fr.insa.forgeard.treillis.NoeudSimple;
 import fr.insa.forgeard.treillis.Treillis;
 import fr.insa.forgeard.treillis.Vecteur2D;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -191,7 +196,23 @@ public class App extends Application {
         });
         
         
+        Help.setAccelerator(KeyCombination.keyCombination("CTRL+h"));
         
+        Help.setOnAction((ActionEvent event)-> {
+            try {
+                String myUrl = "http://stackoverflow.com";
+                URI myURI = new URI(myUrl);
+                try {
+                    java.awt.Desktop.getDesktop().browse(myURI);
+                } catch (IOException ex) {
+                    Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+
+        });
         
         
         
@@ -330,7 +351,7 @@ public class App extends Application {
             graphics_context.setLineWidth(3);
             graphics_context.strokeLine(node2.getPx() + 5, -(node2.getPy() - 5 - 350), node3.getPx() + 5, -(node3.getPy() - 5 - 350));
             graphics_context.setStroke(barreColor(barre1.getForce()));
-            graphics_context.setFill(Color.BLACK);
+            graphics_context.setFill(Color.RED);
             Font theFont = Font.font( "Times New Roman", FontWeight.BOLD, 17 );
             graphics_context.setFont( theFont );
             graphics_context.fillText(String.valueOf(barre1.getID()),((node2.getPx()+node3.getPx())/2) +7,((-(node2.getPy()-350)-(node3.getPy()-350))/2) +25);
@@ -350,7 +371,7 @@ public class App extends Application {
                 graphics_context.setFill(Color.GREEN);
             }
             if (n.nombreInconnue() == 1) {
-                graphics_context.setFill(Color.RED);
+                graphics_context.setFill(Color.BROWN);
             }
             if (n.nombreInconnue() == 2) {
                 graphics_context.setFill(Color.BLACK);
