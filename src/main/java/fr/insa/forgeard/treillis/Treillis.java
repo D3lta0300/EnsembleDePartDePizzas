@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -284,11 +286,14 @@ public class Treillis {
             Matrice coefs = new Matrice(2 * ns, 2 * ns); //créé la matrice qui correspondra au système d'équations
             int nombreReactions = 0; //variable permettant de s'assurer de la position des réactions dans la matrice
 
+            DecimalFormat df = new DecimalFormat("#.########");
+            df.setRoundingMode(RoundingMode.HALF_UP);
+
             //définition de la matrice
             for (Noeud n : this.getNoeuds()) { //place les indices correspondant du système d'équation dans la matrice
                 for (Barre b : n.barresIncidentes()) {
-                    coefs.set((n.getID() - 1) * 2, b.getID() - 1, Math.cos(b.angle(n)));
-                    coefs.set(n.getID() * 2 - 1, b.getID() - 1, Math.sin(b.angle(n)));
+                    coefs.set((n.getID() - 1) * 2, b.getID() - 1, (double)Math.round(Math.cos(b.angle(n))*1000000)/1000000);
+                    coefs.set(n.getID() * 2 - 1, b.getID() - 1, (double)Math.round(Math.sin(b.angle(n))*1000000)/1000000);
                 }
                 if (n.nombreInconnue() == 1) { //gère les appuis simple
                     coefs.set(n.getID() * 2 - 2, nb + nombreReactions, 1);

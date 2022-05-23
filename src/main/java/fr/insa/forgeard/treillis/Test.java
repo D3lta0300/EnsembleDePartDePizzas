@@ -13,6 +13,9 @@ public class Test {
 
     public static void main(String[] args) {
         
+        System.out.println(Math.round(23.44));
+        
+        
         System.out.println("alpha 1");
         System.out.println(Math.atan2(-3, -1));
         System.out.println("alpha3");
@@ -46,7 +49,7 @@ public class Test {
         Vecteur2D force = new Vecteur2D(1, 2);
         treillis.forces(force, 1);
         
-        treillis.save(Treillis.choseFile());
+        //treillis.save(Treillis.choseFile());
         
     }
 }
