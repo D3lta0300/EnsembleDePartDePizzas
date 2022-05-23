@@ -15,13 +15,18 @@ import fr.insa.forgeard.treillis.NoeudSimple;
 import fr.insa.forgeard.treillis.Treillis;
 import fr.insa.forgeard.treillis.Vecteur2D;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -159,11 +164,42 @@ public class App extends Application {
         hBoxForces.getChildren().add(label7);
         hBoxForces.getChildren().add(Fy);
         Button bouttonAjouterForce = new Button("Ajouter force");
+        MenuBar menuBar = new MenuBar();
+        Menu menu1 = new Menu("Fichier");
+        MenuItem Sauvegarder = new MenuItem("Sauvegarder");
+        MenuItem Ouvrir = new MenuItem("Ouvrir...");
+        MenuItem Help = new MenuItem("Aide");
+        
+        menu1.getItems().addAll(Sauvegarder, Ouvrir, Help);
+        menuBar.getMenus().add(menu1);
 
         vbox.getChildren().add(hbox5);
         vbox.getChildren().add(hBoxForces);
         vbox.getChildren().add(bouttonAjouterForce);
 
+        
+        Sauvegarder.setAccelerator(KeyCombination.keyCombination("CTRL+S"));
+        
+        Sauvegarder.setOnAction((ActionEvent event)-> {
+            treillis.save(Treillis.choseFile());
+        });
+        
+        Ouvrir.setAccelerator(KeyCombination.keyCombination("CTRL+O"));
+        
+        Ouvrir.setOnAction((ActionEvent event)-> {
+            treillis.load(Treillis.choseFile());
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         //créer un point
         bouttonCréerN.setOnAction((ActionEvent event) -> {
             xpos = Integer.parseInt(xinput.getText());
@@ -236,8 +272,9 @@ public class App extends Application {
 
         //position bordepane
         root.setLeft(vbox);
-        //root.setLeft(coordonneespts);
 
+        //position menu
+        root.setTop(menuBar);
         //canvas
         // set fill for rectangle
         graphics_context.setFill(Color.LIGHTGREY);
