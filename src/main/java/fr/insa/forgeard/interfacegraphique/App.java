@@ -3,9 +3,10 @@ package fr.insa.forgeard.interfacegraphique;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import java.net.URL;
 import java.io.IOException;
 import javafx.scene.image.Image;
+import java.net.URI;
 
 import fr.insa.forgeard.treillis.Barre;
 import fr.insa.forgeard.treillis.Noeud;
@@ -14,14 +15,23 @@ import fr.insa.forgeard.treillis.NoeudAppuiSimple;
 import fr.insa.forgeard.treillis.NoeudSimple;
 import fr.insa.forgeard.treillis.Treillis;
 import fr.insa.forgeard.treillis.Vecteur2D;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -159,11 +169,58 @@ public class App extends Application {
         hBoxForces.getChildren().add(label7);
         hBoxForces.getChildren().add(Fy);
         Button bouttonAjouterForce = new Button("Ajouter force");
+        MenuBar menuBar = new MenuBar();
+        Menu menu1 = new Menu("Fichier");
+        MenuItem Sauvegarder = new MenuItem("Sauvegarder");
+        MenuItem Ouvrir = new MenuItem("Ouvrir...");
+        MenuItem Help = new MenuItem("Aide");
+        
+        menu1.getItems().addAll(Sauvegarder, Ouvrir, Help);
+        menuBar.getMenus().add(menu1);
 
         vbox.getChildren().add(hbox5);
         vbox.getChildren().add(hBoxForces);
         vbox.getChildren().add(bouttonAjouterForce);
 
+        
+        Sauvegarder.setAccelerator(KeyCombination.keyCombination("CTRL+S"));
+        
+        Sauvegarder.setOnAction((ActionEvent event)-> {
+            treillis.save(Treillis.choseFile());
+        });
+        
+        Ouvrir.setAccelerator(KeyCombination.keyCombination("CTRL+O"));
+        
+        Ouvrir.setOnAction((ActionEvent event)-> {
+            treillis.load(Treillis.choseFile());
+        });
+        
+        
+        Help.setAccelerator(KeyCombination.keyCombination("CTRL+h"));
+        
+        Help.setOnAction((ActionEvent event)-> {
+            try {
+                String myUrl = "http://stackoverflow.com";
+                URI myURI = new URI(myUrl);
+                try {
+                    java.awt.Desktop.getDesktop().browse(myURI);
+                } catch (IOException ex) {
+                    Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+
+        });
+        
+        
+        
+        
+        
+        
+        
+        
         //créer un point
         bouttonCréerN.setOnAction((ActionEvent event) -> {
             xpos = Integer.parseInt(xinput.getText());
@@ -236,8 +293,9 @@ public class App extends Application {
 
         //position bordepane
         root.setLeft(vbox);
-        //root.setLeft(coordonneespts);
 
+        //position menu
+        root.setTop(menuBar);
         //canvas
         // set fill for rectangle
         graphics_context.setFill(Color.LIGHTGREY);
@@ -293,7 +351,7 @@ public class App extends Application {
             graphics_context.setLineWidth(3);
             graphics_context.strokeLine(node2.getPx() + 5, -(node2.getPy() - 5 - 350), node3.getPx() + 5, -(node3.getPy() - 5 - 350));
             graphics_context.setStroke(barreColor(barre1.getForce()));
-            graphics_context.setFill(Color.BLACK);
+            graphics_context.setFill(Color.RED);
             Font theFont = Font.font( "Times New Roman", FontWeight.BOLD, 17 );
             graphics_context.setFont( theFont );
             graphics_context.fillText(String.valueOf(barre1.getID()),((node2.getPx()+node3.getPx())/2) +7,((-(node2.getPy()-350)-(node3.getPy()-350))/2) +25);
@@ -313,7 +371,7 @@ public class App extends Application {
                 graphics_context.setFill(Color.GREEN);
             }
             if (n.nombreInconnue() == 1) {
-                graphics_context.setFill(Color.RED);
+                graphics_context.setFill(Color.BROWN);
             }
             if (n.nombreInconnue() == 2) {
                 graphics_context.setFill(Color.BLACK);
