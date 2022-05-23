@@ -1,7 +1,6 @@
 package fr.insa.forgeard.interfacegraphique;
 
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -9,33 +8,26 @@ import java.io.IOException;
 import javafx.scene.image.Image;
 
 import fr.insa.forgeard.treillis.Barre;
-import fr.insa.forgeard.treillis.Treillis;
 import fr.insa.forgeard.treillis.Noeud;
 import fr.insa.forgeard.treillis.NoeudAppuiDouble;
 import fr.insa.forgeard.treillis.NoeudAppuiSimple;
 import fr.insa.forgeard.treillis.NoeudSimple;
 import fr.insa.forgeard.treillis.Treillis;
 import fr.insa.forgeard.treillis.Vecteur2D;
-import javafx.geometry.Insets;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 /**
  * JavaFX App
@@ -297,9 +289,14 @@ public class App extends Application {
             //dessine les barres
             Noeud node2 = barre1.getNoeudArrive();
             Noeud node3 = barre1.getNoeudDepart();
-            graphics_context.setFill(barreColor(barre1.getForce()));
+            graphics_context.setStroke(barreColor(barre1.getForce()));
             graphics_context.setLineWidth(3);
             graphics_context.strokeLine(node2.getPx() + 5, -(node2.getPy() - 5 - 350), node3.getPx() + 5, -(node3.getPy() - 5 - 350));
+            graphics_context.setStroke(barreColor(barre1.getForce()));
+            graphics_context.setFill(Color.BLACK);
+            Font theFont = Font.font( "Times New Roman", FontWeight.BOLD, 17 );
+            graphics_context.setFont( theFont );
+            graphics_context.fillText(String.valueOf(barre1.getID()),((node2.getPx()+node3.getPx())/2) +7,((-(node2.getPy()-350)-(node3.getPy()-350))/2) +25);
 
         }
 
@@ -323,6 +320,9 @@ public class App extends Application {
             }
 
             graphics_context.fillOval(n.getPx(), -(n.getPy() - 350), 10, 10);
+            Font theFont = Font.font( "Times New Roman", FontWeight.BOLD, 17 );
+            graphics_context.setFont( theFont );
+            graphics_context.fillText(String.valueOf(n.getID()), n.getPx()+7, -(n.getPy()-370));
         }
     }
 
