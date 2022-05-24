@@ -186,13 +186,14 @@ public class App extends Application {
         Sauvegarder.setAccelerator(KeyCombination.keyCombination("CTRL+S"));
         
         Sauvegarder.setOnAction((ActionEvent event)-> {
-            treillis.save(Treillis.choseFile());
+            treillis.save(Treillis.choseFile());            
         });
         
         Ouvrir.setAccelerator(KeyCombination.keyCombination("CTRL+O"));
         
         Ouvrir.setOnAction((ActionEvent event)-> {
             treillis.load(Treillis.choseFile());
+            redraw(graphics_context, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, treillis);
         });
         
         

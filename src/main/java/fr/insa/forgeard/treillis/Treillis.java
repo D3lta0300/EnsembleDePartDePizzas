@@ -292,8 +292,8 @@ public class Treillis {
             //définition de la matrice
             for (Noeud n : this.getNoeuds()) { //place les indices correspondant du système d'équation dans la matrice
                 for (Barre b : n.barresIncidentes()) {
-                    coefs.set((n.getID() - 1) * 2, b.getID() - 1, (double)Math.round(Math.cos(b.angle(n))*1000000)/1000000);
-                    coefs.set(n.getID() * 2 - 1, b.getID() - 1, (double)Math.round(Math.sin(b.angle(n))*1000000)/1000000);
+                    coefs.set((n.getID() - 1) * 2, b.getID() - 1, (double) Math.round(Math.cos(b.angle(n)) * 1000000) / 1000000);
+                    coefs.set(n.getID() * 2 - 1, b.getID() - 1, (double) Math.round(Math.sin(b.angle(n)) * 1000000) / 1000000);
                 }
                 if (n.nombreInconnue() == 1) { //gère les appuis simple
                     coefs.set(n.getID() * 2 - 2, nb + nombreReactions, 1);
@@ -341,12 +341,16 @@ public class Treillis {
      */
     public void save(String str) {
         String test = "";
-
         //ajouter les noeuds au fichier à enregistrer
         for (Noeud n : this.getNoeuds()) {
-            test += n.getID() + " " + n.getPx() + " " + n.getPy() + " " + n.nombreInconnue() + "\n";
+            test += "Noeud: " + n.getID() + " " + n.getPx() + " " + n.getPy() + " " + n.nombreInconnue() + "\n";
         }
-        test += "End of File";
+                //ajoute les barre au fichier
+        for (Barre b:this.getBarres()){
+            test += "Barre: " + b.getID() + " " + b.getNoeudDepart().getID() + " " + b.getNoeudArrive().getID() + "\n";
+        }
+        
+        test+="End of File";
 
         try {
             FileWriter path = new FileWriter(str);
@@ -381,15 +385,24 @@ public class Treillis {
             File inputFile = new File(path);
             inputReader = new BufferedReader(new FileReader(inputFile));
             String str = inputReader.readLine();
-            while ("End of File" != str) {
+            System.out.print("Traitement des Noeuds... ");
+            while ('N' == str.charAt(0)) {
                 String[] informations = str.split(" ");
-                if (informations[3] == "0") {
-                    this.getNoeuds().add(new NoeudSimple(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
-                } else if (informations[3] == "1") {
-                    this.getNoeuds().add(new NoeudAppuiSimple(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
-                } else if (informations[3] == "2") {
-                    this.getNoeuds().add(new NoeudAppuiDouble(Double.parseDouble(informations[1]), Double.parseDouble(informations[2])));
+                if (informations[4].charAt(0) == '0') {
+                    this.addNoeud(new NoeudSimple(Double.parseDouble(informations[2]), Double.parseDouble(informations[3])));
+                } else if (informations[4].charAt(0) == '1') {
+                    this.addNoeud(new NoeudAppuiSimple(Double.parseDouble(informations[2]), Double.parseDouble(informations[3])));
+                } else if (informations[4].charAt(0) == '2') {
+                    this.addNoeud(new NoeudAppuiDouble(Double.parseDouble(informations[2]), Double.parseDouble(informations[3])));
                 }
+                str = inputReader.readLine();
+            }
+            System.out.println("Ok");
+            while ('B' == str.charAt(0)){
+                String[] informations = str.split(" ");
+                System.out.print("Traitement de la barre : " + informations[1] + "... ");
+                this.addBarre(new Barre(this.getNoeudByID(Integer.parseInt(informations[2])), this.getNoeudByID(Integer.parseInt(informations[3]))));
+                System.out.println("Ok");
                 str = inputReader.readLine();
             }
         } catch (IOException er) {
