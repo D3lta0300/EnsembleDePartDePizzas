@@ -312,7 +312,7 @@ public class Treillis {
             forces.set(noeudID * 2 - 2, 0, force.getPx());
             forces.set(noeudID * 2 - 1, 0, force.getPy());
 
-            coefs = coefs.concatCol(forces);
+            coefs = coefs.concatCol(Matrice.identite(ns*2));
 
             System.out.println("La matrice a inverser est :");
             System.out.println(coefs);
@@ -320,11 +320,20 @@ public class Treillis {
             coefs.descenteGauss();
             coefs.remontéeGauss();
             coefs.diagUnitaire();
+            
+            Matrice inverse = coefs.subCols(2*ns, 4*ns-1);
+            System.out.println("Inverse : \n" + inverse);
+            
 
             //résultats
             for (int i = 0; i < 2 * ns; i++) {
                 resultat.set(i, 0, coefs.get(i, 2 * ns));
             }
+            
+            System.out.println("Forces :\n"+forces);
+            
+            resultat = inverse.mult(forces);
+            System.out.println("Résultat : \n" + resultat);
         }
 
         for (Barre b : this.getBarres()) { //ajoute les résultats dans les barres correspondantes

@@ -393,13 +393,13 @@ public class App extends Application {
      * @return
      */
     public static Color barreColor(double force) {
-        double percent = force / 50 + 0.5;
+        double percent = force / 100 + 0.5;
         if (percent<0){
             percent = 0;
         } else if (percent >1){
             percent = 1;
         }
-        return lerp(new Color(1, 0.5, 1 / 3, 1), new Color(0, 0, 1, 1), percent);
+        return lerp(new Color(1, 0, 0, 1), new Color(0, 0, 1, 1), percent);
     }
 
     /**
