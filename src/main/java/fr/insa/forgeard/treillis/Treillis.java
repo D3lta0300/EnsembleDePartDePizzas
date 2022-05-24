@@ -345,7 +345,7 @@ public class Treillis {
     }
 
     /**
-     * Permet de sauvegarde le treillis
+     * Permet de sauvegarder le treillis
      *
      * @param str
      */
@@ -372,6 +372,10 @@ public class Treillis {
         }
     }
 
+    /**
+     * Permet de choisir un fichier en interface graphique
+     * @return l'emplacement du fichier
+     */
     public static String choseFile() {
         String out = "";
         JFileChooser filechoose = new JFileChooser(); // Créer un JFileChooser
@@ -389,6 +393,10 @@ public class Treillis {
         return out;
     }
 
+    /**
+     * Permet de restaurer un treillis
+     * @param path 
+     */
     public void load(String path) {
         BufferedReader inputReader;
         try {
