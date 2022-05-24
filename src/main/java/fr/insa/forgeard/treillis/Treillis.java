@@ -263,8 +263,7 @@ public class Treillis {
      * @return
      */
     public Matrice forces(Vecteur2D force, int noeudID) {
-        this.getNoeudByID(noeudID).setForce(force);
-
+        
         int ns = this.getNoeuds().size(); //nombre de noeuds
         int nb = this.getBarres().size(); //nombre de barres
         int nsas = 0; //nombre de noeuds appui simple
@@ -286,9 +285,6 @@ public class Treillis {
             Matrice coefs = new Matrice(2 * ns, 2 * ns); //créé la matrice qui correspondra au système d'équations
             int nombreReactions = 0; //variable permettant de s'assurer de la position des réactions dans la matrice
 
-            DecimalFormat df = new DecimalFormat("#.########");
-            df.setRoundingMode(RoundingMode.HALF_UP);
-
             //définition de la matrice
             for (Noeud n : this.getNoeuds()) { //place les indices correspondant du système d'équation dans la matrice
                 for (Barre b : n.barresIncidentes()) {
@@ -296,7 +292,7 @@ public class Treillis {
                     coefs.set(n.getID() * 2 - 1, b.getID() - 1, (double) Math.round(Math.sin(b.angle(n)) * 1000000) / 1000000);
                 }
                 if (n.nombreInconnue() == 1) { //gère les appuis simple
-                    coefs.set(n.getID() * 2 - 2, nb + nombreReactions, 1);
+                    coefs.set(n.getID() * 2 - 1, nb + nombreReactions, 1);
                     nombreReactions++;
                 } else if (n.nombreInconnue() == 2) { //gère les appuis double
                     coefs.set(n.getID() * 2 - 2, nb + nombreReactions, 1);
@@ -305,10 +301,13 @@ public class Treillis {
                     nombreReactions++;
                 }
             }
+            
+            Matrice save = coefs;
 
             //calcul des forces
+            
             Matrice forces = new Matrice(2 * ns, 1);
-            //ajoute les conditions initiales
+            //ajout des conditions initiales
             forces.set(noeudID * 2 - 2, 0, force.getPx());
             forces.set(noeudID * 2 - 1, 0, force.getPy());
 
@@ -324,6 +323,8 @@ public class Treillis {
             Matrice inverse = coefs.subCols(2*ns, 4*ns-1);
             System.out.println("Inverse : \n" + inverse);
             
+            Matrice test = inverse.mult(save);
+            System.out.println("Test : \n" + test);
 
             //résultats
             for (int i = 0; i < 2 * ns; i++) {

@@ -92,7 +92,7 @@ public class Barre {
     public String toString() {
         return "Barre{" + "id=" + id + ", noeudDepart=" + noeudDepart + ", noeudArrive=" + noeudArrive + "force : " + force +"} \n";
     }
-
+    
     public Noeud noeudOppose(Noeud in) {
         Noeud out = new NoeudSimple();
         if (in == this.noeudArrive) {
